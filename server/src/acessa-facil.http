@@ -1,0 +1,47 @@
+##############
+# Companys   #
+##############
+POST http://localhost:3000/companys
+Content-Type: application/json
+
+{
+    "name": "teste",
+    "email": "teste4@gmail.com",
+    "identity": "78514420030184",
+    "identityType": "cnpj",
+    "address": {
+        "city": "São Paulo",
+        "uf": "SP",
+        "address": "Rua teste 123",
+        "zipCode": "12345000"
+    }
+}
+
+##############
+# Customers  #
+##############
+
+#######
+POST http://localhost:3000/customers
+Content-Type: application/json
+
+{
+    "fullName": "teste",
+    "email": "teste2@gmail.com",
+    "birthday": "2002-12-07T02:00:00.000Z",
+    "identity": "78514420000184",
+    "identityType": "cnpj",
+    "address": {
+        "city": "São Paulo",
+        "uf": "SP",
+        "address": "Rua teste 123",
+        "zipCode": "12345000"
+    }
+}
+#######
+POST http://localhost:3000/customers/register
+Content-Type: application/json
+
+{
+    "id": "335b0e63-dba6-4902-b014-8a5dda207368"
+}
