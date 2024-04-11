@@ -1,0 +1,10 @@
+ion-grid {
+    ion-row {
+        height: 100vh;
+        ion-col {
+            &:nth-child(1) {
+                background: #a0fff1;
+            }
+        }
+    }
+}

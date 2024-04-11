@@ -13,7 +13,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Customer {
+model Company {
+  id           String    @id @default(uuid())
+  name         String    @db.VarChar(200)
+  email        String    @unique @db.VarChar(200)
+  identity     String    @db.VarChar(14)
+  identityType Identity  @default(cnpj)
+  address      Json
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  Visitor      Visitor[]
+  Visit        Visit[]
+
+  @@map("companys")
+}
+
+model Visitor {
   id           String   @id @default(uuid())
   fullName     String   @db.VarChar(200)
   email        String   @unique @db.VarChar(200)
@@ -23,21 +38,25 @@ model Customer {
   address      Json
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  Company      Company? @relation(fields: [companyId], references: [id])
+  companyId    String?
 
-  @@map("customers")
+  @@map("visitors")
 }
 
-model Company {
-  id           String   @id @default(uuid())
-  name         String   @db.VarChar(200)
-  email        String   @unique @db.VarChar(200)
-  identity     String  @db.VarChar(14)
-  identityType Identity @default(cnpj)
-  address      Json
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  
-  @@map("companys")
+model Visit {
+  id String @id @default(uuid())
+
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String
+
+  scheduledDate DateTime
+  files         String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("visits")
 }
 
 enum Identity {

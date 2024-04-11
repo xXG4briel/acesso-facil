@@ -1,13 +1,46 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>login</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">login</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-grid class="ion-no-padding">
+    <ion-row>
+      <ion-col size="6"></ion-col>
+      <ion-col size="6" class="ion-padding">
+
+        <ion-segment [value]="type" (ionChange)="segmentChanged($event)">
+          <ion-segment-button value="company">
+            <ion-label>Empresa</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="visitor">
+            <ion-label>Visitante</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+
+        <ng-container *ngIf="type === 'visitor'">
+          <form (ngSubmit)="submitVisitor()">
+            <ion-input type="email" fill="outline" placeholder="email@facilacesso.com.br" label="E-mail"
+              labelPlacement="floating" [clearInput]="true"></ion-input>
+            <ion-input type="password" fill="outline" placeholder="senha 1234" label="Senha" labelPlacement="floating"
+              [clearInput]="true"></ion-input>
+
+            <ion-button type="submit">
+              Logar
+            </ion-button>
+          </form>
+        </ng-container>
+
+        <ng-container *ngIf="type === 'company'">
+          <form (ngSubmit)="submitCompany()">
+            <ion-input type="email" fill="outline" placeholder="email@facilacesso.com.br" label="E-mail"
+              labelPlacement="floating" [clearInput]="true"></ion-input>
+            <ion-input type="password" fill="outline" placeholder="senha 1234" label="Senha" labelPlacement="floating"
+              [clearInput]="true"></ion-input>
+
+            <ion-button type="submit">
+              Logar
+            </ion-button>
+          </form>
+        </ng-container>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
 </ion-content>
