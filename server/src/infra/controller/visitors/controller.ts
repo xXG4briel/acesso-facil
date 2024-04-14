@@ -25,25 +25,45 @@ export class VisitorsController {
   ) {}
 
   @Post()
-  async create(@Body() body: CreateDTO) {
-    const found = await this.visitorsService.findByEmailOrIdentity(body);
-    if (found) {
-      throw new BadRequestException(
-        `${found?.email == body.email ? 'E-mail' : found.identityType.toUpperCase()} já cadastrado`,
-      );
-    }
+  @UseInterceptors(FileInterceptor('file'))
+  async create(@UploadedFile(
+    new ParseFilePipe({
+      validators: [
+        new MaxFileSizeValidator({
+          maxSize: 1000 * 1024 * 5,
+          message: 'O arquivo deve ser menor do que 5Mb',
+        }),
+        new FileTypeValidator({ fileType: 'image/*' }),
+      ],
+    }),
+  )
+  file: Express.Multer.File) {
+    // const found = await this.visitorsService.findByEmailOrIdentity(body);
+    // if (found) {
+    //   throw new BadRequestException(
+    //     `${found?.email == body.email ? 'E-mail' : found.identityType.toUpperCase()} já cadastrado`,
+    //   );
+    // }
+    // body.birthday = new Date(body.birthday);
+    // body.password = hashSync(body.password);
 
-    body.password = hashSync(body.password);
+    const { data, error, name } = await this.uploadService.upload(file);
 
-    const result = await this.visitorsService.create(body);
+    // const result = await this.visitorsService.create(body);
 
-    if (!result) {
-      throw new InternalServerErrorException(
-        'Não foi possível fazer o registro',
-      );
-    }
+    // if (isEmpty(data) || error) {
+    //   return new InternalServerErrorException(
+    //     'Não foi possível fazer o upload da sua imagem',
+    //   );
+    // }
 
-    return result;
+    // if (!result) {
+    //   throw new InternalServerErrorException(
+    //     'Não foi possível fazer o registro',
+    //   );
+    // }
+
+    // return result;
   }
 
   @Post('/register')

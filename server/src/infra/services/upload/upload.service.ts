@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-
+import { writeFileSync } from 'fs';
 import { randomUUID } from 'crypto';
 
 import { createClient } from '@supabase/supabase-js';
@@ -20,6 +20,8 @@ export class UploadService {
   }
 
   async upload(file: Express.Multer.File) {
+    const buffer = Buffer.from(file.buffer.toString().replace(/^data:image\/png;base64,/, ''), 'base64');
+
     try {
       const supabase = createClient(
         this.supabaseUrl,
@@ -31,14 +33,14 @@ export class UploadService {
         },
       );
 
-      const ext = `${file.originalname}`.split('.')[1] || 'jpg';
+      const ext = `${file.originalname}`.split('.')[1] || 'png';
       const name = `${randomUUID()}.${ext}`;
 
       this.logger.debug(name);
 
       const result = await supabase.storage
         .from('register')
-        .upload(name, file.buffer, {
+        .upload(name, buffer, {
           upsert: true,
           contentType: file.mimetype,
         });

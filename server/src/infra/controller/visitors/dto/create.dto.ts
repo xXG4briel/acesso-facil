@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsDate,
   IsDateString,
@@ -27,12 +27,13 @@ export class CreateDTO {
   @IsString()
   email: string;
   @IsDateString()
-  birthday: string;
+  birthday: string | Date;
   @IsString()
   identity: string;
   @Matches(/cnpj|cpf/)
   identityType: string;
   @ValidateNested()
+  @Transform((text) => JSON.parse(text.value) )
   @Type(() => AddresDTO)
   @IsNotEmpty()
   address: AddresDTO;

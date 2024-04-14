@@ -24,8 +24,8 @@ export class VisitorsService {
         data,
       });
 
-      this.logger.debug(
-        `register 'with success\n${JSON.stringify(data, null, 2)}`,
+      this.logger.log(
+        `register with success\n${JSON.stringify(data, null, 2)}`,
       );
 
       return result;

@@ -24,8 +24,8 @@ export class CompanysService {
         data,
       });
 
-      this.logger.debug(
-        `register 'with success\n${JSON.stringify(result, null, 2)}`,
+      this.logger.log(
+        `register with success\n${JSON.stringify(result, null, 2)}`,
       );
 
       return result;

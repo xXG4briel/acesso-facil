@@ -16,42 +16,45 @@
           </ion-segment>
 
           <ng-container *ngIf="type === 'visitor'">
-            <form (ngSubmit)="submitVisitor()">
+            <form [formGroup]="visitorsForm" (ngSubmit)="submitVisitor()">
               <ion-grid class="ion-no-padding">
                 <ion-row>
-                  <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Acessa fácil" label="Razão social" labelPlacement="floating"></ion-input>
+                  <ion-input formControlName="fullName" class="ion-margin-top" type="text" fill="outline" placeholder="Acessa fácil" label="Nome completo" labelPlacement="floating"></ion-input>
                 </ion-row>
 
                 <ion-row>
-                  <ion-input class="ion-margin-top" type="password" fill="outline" placeholder="senha 1234" label="Senha" labelPlacement="floating" ></ion-input>
+                  <ion-input formControlName="password" class="ion-margin-top" type="password" fill="outline" placeholder="senha 1234" label="Senha" labelPlacement="floating" ></ion-input>
                 </ion-row>
 
                 <ion-row>
-                  <ion-input class="ion-margin-top" type="email" fill="outline" placeholder="empresa@acessafacil.com.br" label="E-mail" labelPlacement="floating"></ion-input>
+                  <ion-input formControlName="email" class="ion-margin-top" type="email" fill="outline" placeholder="empresa@acessafacil.com.br" label="E-mail" labelPlacement="floating"></ion-input>
                 </ion-row>
 
                 <ion-row>
-                  <ion-input class="ion-margin-top" type="date" fill="outline" placeholder="Seu aniversário" label="Data de nascimento" labelPlacement="floating"></ion-input>
+                  <ion-input formControlName="birthday" class="ion-margin-top" type="date" fill="outline" placeholder="Seu aniversário" label="Data de nascimento" labelPlacement="floating"></ion-input>
                 </ion-row>
 
                 <ion-row>
                   <ion-col size="4">
-                    <ion-select class="ion-margin-top" value="1" fill="outline" placeholder="Selecione">
-                      <ion-select-option value="1">CNPJ</ion-select-option>
-                      <ion-select-option value="2">CPF</ion-select-option>
+                    <ion-select formControlName="identityType" class="ion-margin-top" value="1" fill="outline" placeholder="Selecione">
+                      <ion-select-option value="cnpj">CNPJ</ion-select-option>
+                      <ion-select-option value="cpf">CPF</ion-select-option>
                     </ion-select>
                   </ion-col>
                   <ion-col size="8" class="ion-padding-start">
-                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Cpf/Cnpj" label="Cpf/Cnpj" labelPlacement="floating"></ion-input>
+                    <ion-input formControlName="identity" class="ion-margin-top" type="text" fill="outline" placeholder="Cpf/Cnpj" label="Cpf/Cnpj" labelPlacement="floating"></ion-input>
                   </ion-col>
                 </ion-row>
                 <ion-row>
                   <ion-col size="12">
-                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Endereço" label="Endereço" labelPlacement="floating"></ion-input>
-                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Bairro" label="Bairro" labelPlacement="floating"></ion-input>
-                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Cidade" label="Cidade" labelPlacement="floating"></ion-input>
-                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Uf" label="Uf" labelPlacement="floating"></ion-input>
-                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Complemento" label="Complemento" labelPlacement="floating"></ion-input>
+                    <div formGroupName="address">
+                      <ion-input formControlName="address" class="ion-margin-top" type="text" fill="outline" placeholder="Endereço" label="Endereço" labelPlacement="floating"></ion-input>
+                      <!-- <ion-input formControlName="identity" class="ion-margin-top" type="text" fill="outline" placeholder="Bairro" label="Bairro" labelPlacement="floating"></ion-input> -->
+                      <ion-input formControlName="city" class="ion-margin-top" type="text" fill="outline" placeholder="Cidade" label="Cidade" labelPlacement="floating"></ion-input>
+                      <ion-input formControlName="uf" class="ion-margin-top" type="text" fill="outline" placeholder="Uf" label="Uf" labelPlacement="floating"></ion-input>
+                      <ion-input formControlName="zipCode" class="ion-margin-top" type="text" fill="outline" placeholder="CEP" label="CEP" labelPlacement="floating"></ion-input>
+                      <ion-input formControlName="complement" class="ion-margin-top" type="text" fill="outline" placeholder="Complemento" label="Complemento" labelPlacement="floating"></ion-input>
+                    </div>
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -62,7 +65,7 @@
                 {{ !takePicture ? ( photoSaved ? 'Imagem salva' : 'Tirar Foto') : 'Salvar' }}
               </ion-button>
 
-              <ion-button type="submit">
+              <ion-button type="submit" [disabled]="loading">
                 Cadastrar
               </ion-button>
             </form>

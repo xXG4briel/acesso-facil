@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { CompanysService } from 'src/app/services/companys.service';
 import { VisitorsService } from 'src/app/services/visitors.service';
 
@@ -20,9 +20,13 @@ export class RegisterPage implements OnInit {
   loading: boolean = false;
 
   companysForm: FormGroup;
+  visitorsForm: FormGroup;
+
+  stream: MediaStream;
 
   constructor(
     private readonly alertController: AlertController,
+    private readonly loadingCtrl: LoadingController,
     private readonly companysService: CompanysService,
     private readonly visitorssService: VisitorsService,
     private readonly formBuilder: FormBuilder,
@@ -35,6 +39,21 @@ export class RegisterPage implements OnInit {
       password: ['', Validators.required],
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
+      identity: ['', Validators.required],
+      identityType: ['cnpj', Validators.required],
+      address: this.formBuilder.group({
+        city: ['', Validators.required],
+        uf: ['', Validators.required],
+        address: ['', Validators.required],
+        complement: [''],
+        zipCode: ['', [Validators.required, Validators.pattern('^[0-9]{5}-[0-9]{3}$')]]
+      })
+    });
+    this.visitorsForm = this.formBuilder.group({
+      password: ['', Validators.required],
+      fullName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      birthday: ['', Validators.required],
       identity: ['', Validators.required],
       identityType: ['cnpj', Validators.required],
       address: this.formBuilder.group({
@@ -60,6 +79,7 @@ export class RegisterPage implements OnInit {
       this.loading = true;
       navigator.mediaDevices.getUserMedia({ video: true })
       .then(stream => {
+        this.stream = stream;
         video.srcObject = stream;
         video.play();
       })
@@ -82,7 +102,9 @@ export class RegisterPage implements OnInit {
 
       await this.alert({ header: 'Sucesso', message: 'Imagem salva localmente' });
 
+      this.stream.getTracks().forEach(track => track.stop())
       video.srcObject = null;
+
       this.photoSaved = true;
     }
     this.takePicture = !this.takePicture;
@@ -97,30 +119,81 @@ export class RegisterPage implements OnInit {
 
     await alert.present();
   }
+  async showLoading() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Carregando...',
+    });
 
-  submitCompany(): void {
+    loading.present();
+
+    return loading;
+  }
+
+  async submitCompany(): Promise<void> {
 
     if(this.companysForm.invalid) {
       this.alert({ header: 'Formulário incorreto', message: 'Verifique o formulário novamente.' })
       return;
     }
 
+    const loading = await this.showLoading();
+
     this.companysService.create(this.companysForm.value).subscribe({
       next: (value) => {
         this.alert({ header: 'Sucesso', message: 'Empresa cadastrada' });
-        this.router.navigate(['/login'])
+        this.router.navigate(['/login']);
+        loading.dismiss();
       },
       error: (err) => {
 
         const { error } = err;
+        loading.dismiss();
 
         this.alert({ header: 'Erro', message: error.message })
-
       }
     })
   }
-  submitVisitor() {
-    alert('submitVisitor')
+  async submitVisitor() {
+    const canvas = this.canvas.nativeElement;
+    const file = canvas.toDataURL('image/png')
+
+    const formData = new FormData();
+
+    if(this.visitorsForm.invalid) {
+      this.alert({ header: 'Formulário incorreto', message: 'Verifique o formulário novamente.' })
+      return;
+    }
+
+    Object.keys(this.visitorsForm.value).forEach(key => {
+      if (key !== 'address') {
+        formData.append(key, this.visitorsForm.get(key)?.value);
+      } else {
+        const address = this.visitorsForm.get('address')?.value;
+        formData.append(`address`, JSON.stringify(address));
+      }
+    });
+
+    const blob = new Blob([file], { type: 'image/png' });
+
+    formData.append('file', blob);
+
+
+    const loading = await this.showLoading();
+    this.visitorssService.create(formData).subscribe({
+      next: (value) => {
+        loading.dismiss();
+        this.alert({ header: 'Sucesso', message: 'Empresa cadastrada' });
+        this.router.navigate(['/login']);
+
+      },
+      error: (err) => {
+        loading.dismiss();
+
+        const { error } = err;
+
+        this.alert({ header: 'Erro', message: error.message })
+      }
+    })
   }
 
 }
