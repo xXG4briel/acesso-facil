@@ -1,3 +1,15 @@
+video {
+  background: url(/assets/avatar.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: #95bbdf;
+  background-position: center;
+  margin: 16px auto 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+
 .register-container {
   height: 100vh;
   ion-row {
