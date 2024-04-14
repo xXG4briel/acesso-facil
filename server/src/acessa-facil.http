@@ -5,6 +5,7 @@ POST http://localhost:3000/companys
 Content-Type: application/json
 
 {
+    "password": "teste",
     "name": "teste",
     "email": "teste4@gmail.com",
     "identity": "78514420030184",
@@ -16,20 +17,29 @@ Content-Type: application/json
         "zipCode": "12345000"
     }
 }
-
 ##############
-# Customers  #
-##############
-
-#######
-POST http://localhost:3000/customers
+POST http://localhost:3000/auth/companys
 Content-Type: application/json
 
 {
+    "password": "teste",
+    "email": "teste4@gmail.com"
+}
+
+##############
+# Visitors   #
+##############
+
+#######
+POST http://localhost:3000/visitors
+Content-Type: application/json
+
+{
+    "password": "teste",
     "fullName": "teste",
-    "email": "teste2@gmail.com",
+    "email": "teste32@gmail.com",
     "birthday": "2002-12-07T02:00:00.000Z",
-    "identity": "78514420000184",
+    "identity": "78554420000184",
     "identityType": "cnpj",
     "address": {
         "city": "São Paulo",
@@ -37,11 +47,4 @@ Content-Type: application/json
         "address": "Rua teste 123",
         "zipCode": "12345000"
     }
-}
-#######
-POST http://localhost:3000/customers/register
-Content-Type: application/json
-
-{
-    "id": "335b0e63-dba6-4902-b014-8a5dda207368"
 }

@@ -21,6 +21,8 @@ class AddresDTO {
 
 export class CreateDTO {
   @IsString()
+  password: string;
+  @IsString()
   fullName: string;
   @IsString()
   email: string;

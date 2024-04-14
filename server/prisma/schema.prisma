@@ -14,16 +14,15 @@ datasource db {
 }
 
 model Company {
-  id           String    @id @default(uuid())
+  id           String   @id @default(uuid())
   password     String
-  name         String    @db.VarChar(200)
-  email        String    @unique @db.VarChar(200)
-  identity     String    @db.VarChar(14)
-  identityType Identity  @default(cnpj)
+  name         String   @db.VarChar(200)
+  email        String   @unique @db.VarChar(200)
+  identity     String   @db.VarChar(14)
+  identityType Identity @default(cnpj)
   address      Json
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  Visitor      Visitor[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   Visit        Visit[]
 
   @@map("companys")
@@ -40,8 +39,6 @@ model Visitor {
   address      Json
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  Company      Company? @relation(fields: [companyId], references: [id])
-  companyId    String?
 
   @@map("visitors")
 }
@@ -53,7 +50,7 @@ model Visit {
   companyId String
 
   scheduledDate DateTime
-  files         String[]
+  files         Json
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

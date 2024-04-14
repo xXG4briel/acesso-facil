@@ -21,6 +21,8 @@ class AddresDTO {
 
 export class RegisterPayload {
   @IsString()
+  password: string;
+  @IsString()
   name: string;
   @IsString()
   email: string;

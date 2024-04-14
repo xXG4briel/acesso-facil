@@ -11,29 +11,31 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CustomersService } from 'src/infra/services/customers/customers.service';
+import { VisitorsService } from 'src/infra/services/visitors/customers.service';
 import { UploadService } from 'src/infra/services/upload/upload.service';
 import { RegisterDTO, CreateDTO } from './dto';
-import { get } from 'lodash';
+import { hashSync } from 'bcrypt-nodejs';
 import { isEmpty } from 'class-validator';
 
-@Controller('customers')
-export class CustomersController {
+@Controller('visitors')
+export class VisitorsController {
   constructor(
-    private customersService: CustomersService,
+    private visitorsService: VisitorsService,
     private uploadService: UploadService,
   ) {}
 
   @Post()
   async create(@Body() body: CreateDTO) {
-    const found = await this.customersService.findByEmailOrIdentity(body);
+    const found = await this.visitorsService.findByEmailOrIdentity(body);
     if (found) {
       throw new BadRequestException(
         `${found?.email == body.email ? 'E-mail' : found.identityType.toUpperCase()} já cadastrado`,
       );
     }
 
-    const result = await this.customersService.create(body);
+    body.password = hashSync(body.password);
+
+    const result = await this.visitorsService.create(body);
 
     if (!result) {
       throw new InternalServerErrorException(

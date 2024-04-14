@@ -1,18 +1,17 @@
-import { ConfigurableModuleBuilder, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ClientService } from './client/client.service';
 import { DatabaseModule } from './infra/services';
-import { CompanysService } from './infra/services/companys/companys.service';
-import { CustomersService } from './infra/services/customers/customers.service';
-import { CompanysController } from './infra/controller/companys/companys.controller';
-import { CustomersController } from './infra/controller/customers/customers.controller';
-import { UploadService } from './infra/services/upload/upload.service';
+import { CompanysController } from './infra/controller/companys/controller';
+import { VisitorsController } from './infra/controller/visitors/controller';
+import { AuthController } from './infra/controller/auth/controller';
+import { JwtModule } from '@nestjs/jwt'
+
 
 @Module({
-  imports: [DatabaseModule],
-  controllers: [AppController, CompanysController, CustomersController],
-  providers: [AppService],
+  imports: [DatabaseModule, JwtModule.register({ global: true, secret: '%/*G3cPX01-k`hzB%-OA9:}vgo)9Jtzq', signOptions: { expiresIn: '1day' } })],
+  controllers: [AppController, CompanysController, VisitorsController, AuthController],
+  providers: [AppService, ],
   exports: [],
 })
 export class AppModule {}

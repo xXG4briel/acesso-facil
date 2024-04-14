@@ -2,13 +2,13 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ClientService } from 'src/client/client.service';
 
 @Injectable()
-export class CustomersService {
-  private readonly logger = new Logger(CustomersService.name);
+export class VisitorsService {
+  private readonly logger = new Logger(VisitorsService.name);
 
   constructor(private clientService: ClientService) {}
 
   async findByEmailOrIdentity(data) {
-    return await this.clientService.customer.findFirst({
+    return await this.clientService.visitor.findFirst({
       where: {
         OR: [
           { email: { equals: data.email } },
@@ -20,7 +20,7 @@ export class CustomersService {
 
   async create(data) {
     try {
-      const result = await this.clientService.customer.create({
+      const result = await this.clientService.visitor.create({
         data,
       });
 
