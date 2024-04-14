@@ -17,14 +17,6 @@ Content-Type: application/json
         "zipCode": "12345000"
     }
 }
-##############
-POST http://localhost:3000/auth/companys
-Content-Type: application/json
-
-{
-    "password": "teste",
-    "email": "teste4@gmail.com"
-}
 
 ##############
 # Visitors   #
@@ -47,4 +39,24 @@ Content-Type: application/json
         "address": "Rua teste 123",
         "zipCode": "12345000"
     }
+}
+##############
+#    AUTH    #
+##############
+
+##############
+POST http://localhost:3000/auth/companys
+Content-Type: application/json
+
+{
+    "password": "teste",
+    "email": "teste4@gmail.com"
+}
+##############
+POST http://localhost:3000/auth/visitors
+Content-Type: application/json
+
+{
+    "password": "teste",
+    "email": "teste32@gmail.com"
 }

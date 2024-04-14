@@ -7,9 +7,7 @@ import {
 } from '@nestjs/common';
 import { CompanysService } from 'src/infra/services/companys/companys.service';
 import { RegisterPayload } from './dto';
-import { hashSync, compareSync } from 'bcrypt-nodejs'
-import { LoginPayload } from './dto/login.dto';
-import { pick } from 'lodash';
+import { hashSync } from 'bcrypt-nodejs'
 @Controller('companys')
 export class CompanysController {
   constructor(private readonly companysService: CompanysService) {}
@@ -34,22 +32,5 @@ export class CompanysController {
     }
 
     return result;
-  }
-  @Post('/login')
-  async login(@Body() body: LoginPayload) {
-    const found = await this.companysService.findByEmailOrIdentity(body);
-    if (!found) {
-      throw new BadRequestException(
-        `Empresa não cadastrada`,
-      );
-    }
-
-    if (!compareSync(body.password, found.password)) {
-      throw new InternalServerErrorException(
-        'Senha incorreta',
-      );
-    }
-
-    return { ...body };
   }
 }
