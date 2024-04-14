@@ -7,9 +7,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegisterPage implements OnInit {
 
+  type: string = 'visitor';
+
   constructor() { }
 
   ngOnInit() {
+  }
+  onClick() {
+  }
+  segmentChanged(e: any) {
+    this.type = e.target.value
+  }
+
+  submitCompany() {
+    alert('submitCompany')
+  }
+  submitVisitor() {
+    alert('submitVisitor')
   }
 
 }

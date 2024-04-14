@@ -3,7 +3,21 @@ ion-grid {
         height: 100vh;
         ion-col {
             &:nth-child(1) {
-                background: #a0fff1;
+                background: var(--ion-color-primary);
+            }
+            .login-form-container {
+              max-width: 400px;
+              margin: 0 auto;
+              height: 100%;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+
+              ion-button {
+                width: 80%;
+                display: flex;
+                margin: 16px auto 0;
+              }
             }
         }
     }

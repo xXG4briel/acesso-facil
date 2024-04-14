@@ -1,13 +1,114 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">register</ion-title>
-    </ion-toolbar>
-  </ion-header>
+
+  <ion-grid class="register-container ion-no-padding">
+    <ion-row>
+      <ion-col size="5" style="background: var(--ion-color-primary)"></ion-col>
+      <ion-col size="7" class="ion-padding">
+        <div class="login-form-container">
+          <!-- <ion-title>Entrar</ion-title> -->
+          <ion-segment [value]="type" (ionChange)="segmentChanged($event)">
+            <ion-segment-button value="company">
+              <ion-label>Empresa</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="visitor">
+              <ion-label>Visitante</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+
+          <ng-container *ngIf="type === 'visitor'">
+            <form (ngSubmit)="submitVisitor()">
+              <ion-grid class="ion-no-padding">
+                <ion-row>
+                  <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Acessa fácil" label="Razão social" labelPlacement="floating"></ion-input>
+                </ion-row>
+
+                <ion-row>
+                  <ion-input class="ion-margin-top" type="password" fill="outline" placeholder="senha 1234" label="Senha" labelPlacement="floating" ></ion-input>
+                </ion-row>
+
+                <ion-row>
+                  <ion-input class="ion-margin-top" type="email" fill="outline" placeholder="empresa@acessafacil.com.br" label="E-mail" labelPlacement="floating"></ion-input>
+                </ion-row>
+
+                <ion-row>
+                  <ion-input class="ion-margin-top" type="date" fill="outline" placeholder="Seu aniversário" label="Data de nascimento" labelPlacement="floating"></ion-input>
+                </ion-row>
+
+                <ion-row>
+                  <ion-col size="4">
+                    <ion-select class="ion-margin-top" value="1" fill="outline" placeholder="Selecione">
+                      <ion-select-option value="1">CNPJ</ion-select-option>
+                      <ion-select-option value="2">CPF</ion-select-option>
+                    </ion-select>
+                  </ion-col>
+                  <ion-col size="8" class="ion-padding-start">
+                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Cpf/Cnpj" label="Cpf/Cnpj" labelPlacement="floating"></ion-input>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Endereço" label="Endereço" labelPlacement="floating"></ion-input>
+                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Bairro" label="Bairro" labelPlacement="floating"></ion-input>
+                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Cidade" label="Cidade" labelPlacement="floating"></ion-input>
+                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Uf" label="Uf" labelPlacement="floating"></ion-input>
+                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Complemento" label="Complemento" labelPlacement="floating"></ion-input>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+              <ion-button type="submit">
+                Cadastrar
+              </ion-button>
+            </form>
+          </ng-container>
+
+          <ng-container *ngIf="type === 'company'">
+            <form (ngSubmit)="submitCompany()">
+              <ion-grid class="ion-no-padding">
+                <ion-row>
+                  <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Acessa fácil" label="Razão social" labelPlacement="floating"></ion-input>
+                </ion-row>
+
+                <ion-row>
+                  <ion-input class="ion-margin-top" type="password" fill="outline" placeholder="senha 1234" label="Senha" labelPlacement="floating" ></ion-input>
+                </ion-row>
+
+                <ion-row>
+                  <ion-input class="ion-margin-top" type="email" fill="outline" placeholder="empresa@acessafacil.com.br" label="E-mail" labelPlacement="floating"></ion-input>
+                </ion-row>
+
+                <ion-row>
+                  <ion-col size="4">
+
+                    <ion-select class="ion-margin-top" value="1" fill="outline" placeholder="Selecione">
+                      <ion-select-option value="1">CNPJ</ion-select-option>
+                      <ion-select-option value="2">CPF</ion-select-option>
+                    </ion-select>
+                  </ion-col>
+                  <ion-col size="8" class="ion-padding-start">
+                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Cpf/Cnpj" label="Cpf/Cnpj" labelPlacement="floating"></ion-input>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Endereço" label="Endereço" labelPlacement="floating"></ion-input>
+                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Bairro" label="Bairro" labelPlacement="floating"></ion-input>
+                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Cidade" label="Cidade" labelPlacement="floating"></ion-input>
+                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Uf" label="Uf" labelPlacement="floating"></ion-input>
+                    <ion-input class="ion-margin-top" type="text" fill="outline" placeholder="Complemento" label="Complemento" labelPlacement="floating"></ion-input>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+
+              <ion-button type="submit">
+                Cadastrar
+              </ion-button>
+            </form>
+          </ng-container>
+        </div>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
