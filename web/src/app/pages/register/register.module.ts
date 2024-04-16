@@ -9,7 +9,6 @@ import { RegisterPageRoutingModule } from './register-routing.module';
 import { RegisterPage } from './register.page';
 import { VisitorsService } from 'src/app/services/visitors.service';
 import { CompanysService } from 'src/app/services/companys.service';
-import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -17,7 +16,6 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     IonicModule,
     RegisterPageRoutingModule,
-    HttpClientModule,
     ReactiveFormsModule,
   ],
   declarations: [RegisterPage],

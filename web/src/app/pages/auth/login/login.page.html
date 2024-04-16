@@ -16,10 +16,10 @@
           </ion-segment>
 
           <ng-container *ngIf="type === 'visitors'">
-            <form (ngSubmit)="submit()">
-              <ion-input class="ion-margin-top" type="email" fill="outline" placeholder="email@facilacesso.com.br" label="E-mail"
+            <form [formGroup]="loginForm" (ngSubmit)="submit()">
+              <ion-input formControlName="email" class="ion-margin-top" type="email" fill="outline" placeholder="email@facilacesso.com.br" label="E-mail"
                 labelPlacement="floating" [clearInput]="true"></ion-input>
-              <ion-input class="ion-margin-top" type="password" fill="outline" placeholder="senha 1234" label="Senha" labelPlacement="floating"
+              <ion-input formControlName="password" class="ion-margin-top" type="password" fill="outline" placeholder="senha 1234" label="Senha" labelPlacement="floating"
                 [clearInput]="true"></ion-input>
 
               <ion-button type="submit">
@@ -29,10 +29,10 @@
           </ng-container>
 
           <ng-container *ngIf="type === 'companys'">
-            <form (ngSubmit)="submit()">
-              <ion-input class="ion-margin-top" type="email" fill="outline" placeholder="email@facilacesso.com.br" label="E-mail"
+            <form [formGroup]="loginForm" (ngSubmit)="submit()">
+              <ion-input formControlName="email" class="ion-margin-top" type="email" fill="outline" placeholder="email@facilacesso.com.br" label="E-mail"
                 labelPlacement="floating" [clearInput]="true"></ion-input>
-              <ion-input class="ion-margin-top" type="password" fill="outline" placeholder="senha 1234" label="Senha" labelPlacement="floating"
+              <ion-input formControlName="password" class="ion-margin-top" type="password" fill="outline" placeholder="senha 1234" label="Senha" labelPlacement="floating"
                 [clearInput]="true"></ion-input>
 
               <ion-button type="submit">
