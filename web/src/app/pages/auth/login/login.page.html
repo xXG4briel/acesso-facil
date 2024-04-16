@@ -10,13 +10,13 @@
             <ion-segment-button value="company">
               <ion-label>Empresa</ion-label>
             </ion-segment-button>
-            <ion-segment-button value="visitor">
+            <ion-segment-button value="visitors">
               <ion-label>Visitante</ion-label>
             </ion-segment-button>
           </ion-segment>
 
-          <ng-container *ngIf="type === 'visitor'">
-            <form (ngSubmit)="submitVisitor()">
+          <ng-container *ngIf="type === 'visitors'">
+            <form (ngSubmit)="submit()">
               <ion-input class="ion-margin-top" type="email" fill="outline" placeholder="email@facilacesso.com.br" label="E-mail"
                 labelPlacement="floating" [clearInput]="true"></ion-input>
               <ion-input class="ion-margin-top" type="password" fill="outline" placeholder="senha 1234" label="Senha" labelPlacement="floating"
@@ -28,8 +28,8 @@
             </form>
           </ng-container>
 
-          <ng-container *ngIf="type === 'company'">
-            <form (ngSubmit)="submitCompany()">
+          <ng-container *ngIf="type === 'companys'">
+            <form (ngSubmit)="submit()">
               <ion-input class="ion-margin-top" type="email" fill="outline" placeholder="email@facilacesso.com.br" label="E-mail"
                 labelPlacement="floating" [clearInput]="true"></ion-input>
               <ion-input class="ion-margin-top" type="password" fill="outline" placeholder="senha 1234" label="Senha" labelPlacement="floating"

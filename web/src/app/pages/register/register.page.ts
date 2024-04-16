@@ -1,7 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertService } from 'src/app/services/alert.service';
+
 import { CompanysService } from 'src/app/services/companys.service';
 import { VisitorsService } from 'src/app/services/visitors.service';
 
@@ -25,8 +26,7 @@ export class RegisterPage implements OnInit {
   stream: MediaStream;
 
   constructor(
-    private readonly alertController: AlertController,
-    private readonly loadingCtrl: LoadingController,
+    private readonly alertService: AlertService,
     private readonly companysService: CompanysService,
     private readonly visitorssService: VisitorsService,
     private readonly formBuilder: FormBuilder,
@@ -84,7 +84,7 @@ export class RegisterPage implements OnInit {
         video.play();
       })
       .catch( async (error) => {
-        await this.alert({ header: 'Erro', message: error })
+        await this.alertService.alert({ header: 'Erro', message: error })
       });
       this.loading = false;
     }
@@ -100,7 +100,7 @@ export class RegisterPage implements OnInit {
       // Exibir a imagem capturada, você pode querer enviá-la para o backend ou fazer mais alguma coisa com ela
       // console.log(imageDataURL);
 
-      await this.alert({ header: 'Sucesso', message: 'Imagem salva localmente' });
+      await this.alertService.alert({ header: 'Sucesso', message: 'Imagem salva localmente' });
 
       this.stream.getTracks().forEach(track => track.stop())
       video.srcObject = null;
@@ -110,37 +110,18 @@ export class RegisterPage implements OnInit {
     this.takePicture = !this.takePicture;
   }
 
-  async alert({ header, message }: { header: string, message: string }) {
-    const alert = await this.alertController.create({
-      header,
-      message,
-      buttons: ['Ok'],
-    });
-
-    await alert.present();
-  }
-  async showLoading() {
-    const loading = await this.loadingCtrl.create({
-      message: 'Carregando...',
-    });
-
-    loading.present();
-
-    return loading;
-  }
-
-  async submitCompany(): Promise<void> {
+   async submitCompany(): Promise<void> {
 
     if(this.companysForm.invalid) {
-      this.alert({ header: 'Formulário incorreto', message: 'Verifique o formulário novamente.' })
+      this.alertService.alert({ header: 'Formulário incorreto', message: 'Verifique o formulário novamente.' })
       return;
     }
 
-    const loading = await this.showLoading();
+    const loading = await this.alertService.showLoading();
 
     this.companysService.create(this.companysForm.value).subscribe({
       next: (value) => {
-        this.alert({ header: 'Sucesso', message: 'Empresa cadastrada' });
+        this.alertService.alert({ header: 'Sucesso', message: 'Empresa cadastrada' });
         this.router.navigate(['/login']);
         loading.dismiss();
       },
@@ -149,7 +130,7 @@ export class RegisterPage implements OnInit {
         const { error } = err;
         loading.dismiss();
 
-        this.alert({ header: 'Erro', message: error.message })
+        this.alertService.alert({ header: 'Erro', message: error.message })
       }
     })
   }
@@ -160,7 +141,7 @@ export class RegisterPage implements OnInit {
     const formData = new FormData();
 
     if(this.visitorsForm.invalid) {
-      this.alert({ header: 'Formulário incorreto', message: 'Verifique o formulário novamente.' })
+      this.alertService.alert({ header: 'Formulário incorreto', message: 'Verifique o formulário novamente.' })
       return;
     }
 
@@ -178,11 +159,11 @@ export class RegisterPage implements OnInit {
     formData.append('file', blob);
 
 
-    const loading = await this.showLoading();
+    const loading = await this.alertService.showLoading();
     this.visitorssService.create(formData).subscribe({
       next: (value) => {
         loading.dismiss();
-        this.alert({ header: 'Sucesso', message: 'Empresa cadastrada' });
+        this.alertService.alert({ header: 'Sucesso', message: 'Empresa cadastrada' });
         this.router.navigate(['/login']);
 
       },
@@ -191,7 +172,7 @@ export class RegisterPage implements OnInit {
 
         const { error } = err;
 
-        this.alert({ header: 'Erro', message: error.message })
+        this.alertService.alert({ header: 'Erro', message: error.message })
       }
     })
   }
