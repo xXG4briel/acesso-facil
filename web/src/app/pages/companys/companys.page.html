@@ -1,0 +1,123 @@
+<ion-header color="primary">
+  <ion-toolbar color="primary">
+    <ion-title>Dados da empresa</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <main>
+
+    <ion-segment value="wait" (ionChange)="segmentChanged($event)" class="ion-margin-top">
+      <ion-segment-button value="wait" [disabled]="!visitorsWaiting?.length" [style.pointer-events]="!visitorsWaiting?.length ? 'none' : 'initial'">
+        <ion-label>{{ visitorsWaiting?.length ?? 0 }} Aguardando</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="approve" [disabled]="!visitorsApproved?.length" [style.pointer-events]="!visitorsApproved?.length ? 'none' : 'initial'">
+        <ion-label>{{ visitorsApproved?.length ?? 0 }} Autorizados</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="reject" [disabled]="!visitorsReject?.length" [style.pointer-events]="!visitorsReject?.length ? 'none' : 'initial'">
+        <ion-label>{{ visitorsReject?.length ?? 0 }} Recusados</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="finish" [disabled]="!visitorsFinish?.length" [style.pointer-events]="!visitorsFinish?.length ? 'none' : 'initial'">
+        <ion-label>{{ visitorsFinish?.length ?? 0 }} Finalizados</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <ion-list>
+      <ng-container *ngIf="type == 'wait' && visitorsWaiting?.length">
+        <ion-item *ngFor="let visitor of visitorsWaiting">
+          <ion-thumbnail>
+            <img src="https://img.freepik.com/psd-premium/avatar-de-desenho-animado-3d-do-engenheiro-com-capacete-de-seguranca_1020-5136.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1712620800&semt=ais" />
+          </ion-thumbnail>
+
+          <ion-label class="ion-padding-start">
+            <h1>{{ visitor.name }} - {{ visitor.role }} </h1>
+            <p>{{ visitor.phone }}</p>
+          </ion-label>
+
+          <ion-label>
+            <p>{{ visitor.description }}</p>
+          </ion-label>
+
+
+          <ion-button (click)="onClick()" color="success">
+            <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+          </ion-button>
+          <ion-button (click)="onClick()" color="danger">
+            <ion-icon slot="icon-only" name="close"></ion-icon>
+          </ion-button>
+          <ion-button (click)="onClick()" fill="clear" shape="round">
+            <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+          </ion-button>
+
+        </ion-item>
+      </ng-container>
+      <ng-container *ngIf="type == 'approve' && visitorsApproved?.length">
+        <ion-item *ngFor="let visitor of visitorsApproved">
+          <ion-thumbnail>
+            <img src="https://img.freepik.com/psd-premium/avatar-de-desenho-animado-3d-do-engenheiro-com-capacete-de-seguranca_1020-5136.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1712620800&semt=ais" />
+          </ion-thumbnail>
+
+          <ion-label class="ion-padding-start">
+            <h1>{{ visitor.name }} - {{ visitor.role }} </h1>
+            <p>{{ visitor.phone }}</p>
+          </ion-label>
+
+          <ion-label>
+            <p>{{ visitor.description }}</p>
+          </ion-label>
+
+
+          <ion-button (click)="onClick()" fill="clear" shape="round">
+            <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+          </ion-button>
+
+        </ion-item>
+      </ng-container>
+      <ng-container *ngIf="type == 'reject' && visitorsReject?.length">
+        <ion-item *ngFor="let visitor of visitorsReject">
+          <ion-thumbnail>
+            <img src="https://img.freepik.com/psd-premium/avatar-de-desenho-animado-3d-do-engenheiro-com-capacete-de-seguranca_1020-5136.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1712620800&semt=ais" />
+          </ion-thumbnail>
+
+          <ion-label class="ion-padding-start">
+            <h1>{{ visitor.name }} - {{ visitor.role }} </h1>
+            <p>{{ visitor.phone }}</p>
+          </ion-label>
+
+          <ion-label>
+            <p>{{ visitor.description }}</p>
+          </ion-label>
+
+
+          <ion-button (click)="onClick()" fill="clear" shape="round">
+            <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+          </ion-button>
+
+        </ion-item>
+      </ng-container>
+      <ng-container *ngIf="type == 'finish' && visitorsFinish?.length">
+        <ion-item *ngFor="let visitor of visitorsFinish">
+          <ion-thumbnail>
+            <img src="https://img.freepik.com/psd-premium/avatar-de-desenho-animado-3d-do-engenheiro-com-capacete-de-seguranca_1020-5136.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1712620800&semt=ais" />
+          </ion-thumbnail>
+
+          <ion-label class="ion-padding-start">
+            <h1>{{ visitor.name }} - {{ visitor.role }} </h1>
+            <p>{{ visitor.phone }}</p>
+          </ion-label>
+
+          <ion-label>
+            <p>{{ visitor.description }}</p>
+          </ion-label>
+
+
+          <ion-button (click)="onClick()" fill="clear" shape="round">
+            <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+          </ion-button>
+
+        </ion-item>
+      </ng-container>
+    </ion-list>
+  </main>
+</ion-content>

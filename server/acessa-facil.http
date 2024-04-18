@@ -5,9 +5,9 @@ POST http://localhost:3000/companys
 Content-Type: application/json
 
 {
-    "password": "teste",
+    "password": "1234",
     "name": "teste",
-    "email": "teste4@gmail.com",
+    "email": "teste@gmail.com",
     "identity": "78514420030184",
     "identityType": "cnpj",
     "address": {

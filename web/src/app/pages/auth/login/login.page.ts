@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertService } from 'src/app/services/alert.service';
-import { LoginService } from 'src/app/services/login.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +16,7 @@ export class LoginPage implements OnInit {
   loginForm: FormGroup;
 
   constructor(
-    private readonly loginService: LoginService,
+    private readonly authService: AuthService,
     private readonly alertService: AlertService,
     private readonly router: Router,
     private readonly formBuilder: FormBuilder,
@@ -32,6 +32,8 @@ export class LoginPage implements OnInit {
   }
   segmentChanged(e: any) {
     this.type = e.target.value
+    this.loginForm.patchValue(({ email: '', password: ''  }));
+    this.loginForm.markAsUntouched();
   }
 
   async submit() {
@@ -43,9 +45,13 @@ export class LoginPage implements OnInit {
 
     const loading = await this.alertService.showLoading();
 
-    this.loginService.login(this.loginForm.value, this.type).subscribe({
-      next: (value) => {
+    this.authService.login(this.loginForm.value, this.type).subscribe({
+      next: (value: any) => {
+
+        localStorage.setItem('access_token', JSON.stringify(value.access_token));
+
         this.router.navigate([`/${this.type}`]);
+
         loading.dismiss();
       },
       error: (err) => {
