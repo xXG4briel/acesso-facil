@@ -14,4 +14,8 @@ export class CompanysService {
     const url = `${BASE_URL}/companys`
     return this.httpService.post<T>(url, data);
   }
+  getVisitors<T>(): Observable<T> {
+    const url = `${BASE_URL}/companys/visitors`;
+    return this.httpService.get<T>(url);
+  }
 }

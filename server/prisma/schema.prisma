@@ -45,6 +45,9 @@ model Visit {
   updatedAt     DateTime @updatedAt
   files         Json
   company       Company  @relation(fields: [companyId], references: [id])
+  approved      Boolean?
+  rejected      Boolean?
+  finished      Boolean  @default(false)
 
   @@map("visits")
 }

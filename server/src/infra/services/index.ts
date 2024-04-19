@@ -4,6 +4,7 @@ import { CompanysService } from './companys/companys.service';
 import { VisitorsService } from './visitors/customers.service';
 import { UploadService } from './upload/upload.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { VisitsService } from './visits/visits.service';
 @Module({
   imports: [ConfigModule],
   providers: [
@@ -12,6 +13,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     UploadService,
     ClientService,
     ConfigService,
+    VisitsService,
   ],
   exports: [
     CompanysService,
@@ -19,6 +21,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     UploadService,
     ClientService,
     ConfigService,
+    VisitsService,
   ],
 })
 export class DatabaseModule {}

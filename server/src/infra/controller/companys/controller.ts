@@ -2,12 +2,13 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   InternalServerErrorException,
   Post,
 } from '@nestjs/common';
 import { CompanysService } from 'src/infra/services/companys/companys.service';
 import { RegisterPayload } from './dto';
-import { hashSync } from 'bcrypt-nodejs'
+import { hashSync } from 'bcrypt-nodejs';
 @Controller('companys')
 export class CompanysController {
   constructor(private readonly companysService: CompanysService) {}

@@ -126,8 +126,8 @@ export class RegisterPage implements OnInit {
         loading.dismiss();
       },
       error: (err) => {
-
         const { error } = err;
+        
         loading.dismiss();
 
         this.alertService.alert({ header: 'Erro', message: error.message })

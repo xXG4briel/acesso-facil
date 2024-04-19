@@ -33,7 +33,7 @@ export class CreateDTO {
   @Matches(/cnpj|cpf/)
   identityType: string;
   @ValidateNested()
-  @Transform((text) => JSON.parse(text.value) )
+  @Transform((text) => JSON.parse(text.value))
   @Type(() => AddresDTO)
   @IsNotEmpty()
   address: AddresDTO;

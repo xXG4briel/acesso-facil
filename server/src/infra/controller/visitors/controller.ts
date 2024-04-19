@@ -26,18 +26,20 @@ export class VisitorsController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  async create(@UploadedFile(
-    new ParseFilePipe({
-      validators: [
-        new MaxFileSizeValidator({
-          maxSize: 1000 * 1024 * 5,
-          message: 'O arquivo deve ser menor do que 5Mb',
-        }),
-        new FileTypeValidator({ fileType: 'image/*' }),
-      ],
-    }),
-  )
-  file: Express.Multer.File) {
+  async create(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({
+            maxSize: 1000 * 1024 * 5,
+            message: 'O arquivo deve ser menor do que 5Mb',
+          }),
+          new FileTypeValidator({ fileType: 'image/*' }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
     // const found = await this.visitorsService.findByEmailOrIdentity(body);
     // if (found) {
     //   throw new BadRequestException(

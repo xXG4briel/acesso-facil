@@ -20,7 +20,10 @@ export class UploadService {
   }
 
   async upload(file: Express.Multer.File) {
-    const buffer = Buffer.from(file.buffer.toString().replace(/^data:image\/png;base64,/, ''), 'base64');
+    const buffer = Buffer.from(
+      file.buffer.toString().replace(/^data:image\/png;base64,/, ''),
+      'base64',
+    );
 
     try {
       const supabase = createClient(
