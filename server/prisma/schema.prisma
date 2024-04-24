@@ -33,20 +33,22 @@ model Visitor {
   address      Json
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  Visit        Visit[]
 
   @@map("visitors")
 }
 
 model Visit {
   id            String   @id @default(uuid())
+  visitorId     String
   companyId     String
   scheduledDate DateTime
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   files         Json
   company       Company  @relation(fields: [companyId], references: [id])
+  visitor       Visitor  @relation(fields: [visitorId], references: [id])
   approved      Boolean?
-  rejected      Boolean?
   finished      Boolean  @default(false)
 
   @@map("visits")

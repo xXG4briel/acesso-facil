@@ -1,6 +1,5 @@
 import { Transform, Type } from 'class-transformer';
 import {
-  IsDate,
   IsDateString,
   IsNotEmpty,
   IsString,

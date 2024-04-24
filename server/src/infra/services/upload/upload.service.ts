@@ -26,15 +26,7 @@ export class UploadService {
     );
 
     try {
-      const supabase = createClient(
-        this.supabaseUrl,
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdhcXN6dnJ3emdpdnR4Y25wcWdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTI0NTk2ODAsImV4cCI6MjAyODAzNTY4MH0._zwY6txQlZDS31rhqs5ewri3VzO9bbje3lJUv9tm7fc',
-        {
-          auth: {
-            persistSession: false,
-          },
-        },
-      );
+      const supabase = this.getClient();
 
       const ext = `${file.originalname}`.split('.')[1] || 'png';
       const name = `${randomUUID()}.${ext}`;
@@ -51,5 +43,37 @@ export class UploadService {
     } catch (err) {
       this.logger.error(err);
     }
+  }
+  async uploadAll(file: Express.Multer.File) {
+    const buffer = Buffer.from(
+      file.buffer.toString().split(',')[1],
+    );
+
+    try {
+      const supabase = this.getClient();
+
+      const ext = `${file.originalname}`.split('.')[1] || 'png';
+      const name = `${randomUUID()}.${ext}`;
+
+      this.logger.debug(name);
+
+      const result = await supabase.storage
+        .from('register')
+        .upload(name, buffer, {
+          upsert: true,
+          contentType: file.mimetype,
+        });
+      return { ...result, name };
+    } catch (err) {
+      this.logger.error(err);
+    }
+  }
+
+  private getClient() {
+    return createClient(this.supabaseUrl, this.supabaseKey, {
+      auth: {
+        persistSession: false,
+      }}
+    );
   }
 }

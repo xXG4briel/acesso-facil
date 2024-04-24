@@ -41,9 +41,44 @@ Content-Type: application/json
 ##############
 
 ##############
-GET http://localhost:3000/visits
+POST http://localhost:3000/visits
 Content-Type: application/json
 
+{
+    "visitorId": "bbb0b44c-9c00-4a30-9186-87e0a9449dc8",
+    "companyId": "9b86dc39-84c6-48f0-b48a-abec0a047f4b",
+    "scheduledDate": "2024-04-20T17:59:59.563Z"
+}
+
+##############
+GET http://localhost:3000/visits/companys/9b86dc39-84c6-48f0-b48a-abec0a047f4b
+Content-Type: application/json
+
+##############
+GET http://localhost:3000/visits/bbb0b44c-9c00-4a30-9186-87e0a9449dc8
+Content-Type: application/json
+##############
+PATCH http://localhost:3000/visits/bbb0b44c-9c00-4a30-9186-87e0a9449dc8
+Content-Type: application/json
+
+{
+    "approved": true
+}
+##############
+PATCH http://localhost:3000/visits/bbb0b44c-9c00-4a30-9186-87e0a9449dc8
+Content-Type: application/json
+
+{
+    "approved": false,
+}
+##############
+
+PATCH http://localhost:3000/visits/bbb0b44c-9c00-4a30-9186-87e0a9449dc8
+Content-Type: application/json
+
+{
+    "finished": true
+}
 
 ##############
 #    AUTH    #
@@ -54,8 +89,8 @@ POST http://localhost:3000/auth/companys
 Content-Type: application/json
 
 {
-    "password": "teste",
-    "email": "teste4@gmail.com"
+    "password": "1234",
+    "email": "teste@gmail.com"
 }
 ##############
 POST http://localhost:3000/auth/visitors
