@@ -13,6 +13,7 @@ model Company {
   email        String   @unique @db.VarChar(200)
   identity     String   @db.VarChar(14)
   identityType Identity @default(cnpj)
+  url          String
   address      Json
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -30,6 +31,7 @@ model Visitor {
   birthday     DateTime @db.Date
   identity     String   @db.VarChar(14)
   identityType Identity @default(cnpj)
+  url          String
   address      Json
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
