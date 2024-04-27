@@ -12,9 +12,16 @@ export class UploadService {
   private supabaseUrl: string;
   private supabaseKey: string;
 
+  private storage: { url: string, bucket: string };
+
   constructor(private configService: ConfigService) {
     this.supabaseUrl = this.configService.getOrThrow('SUPABASE_URL');
     this.supabaseKey = this.configService.getOrThrow('SUPABASE_KEY');
+
+    this.storage = {
+      bucket: this.configService.getOrThrow('STORAGE_BUCKET'),
+      url: this.configService.getOrThrow('STORAGE_URL')
+    }
 
     this.logger.debug(`\nurl ${this.supabaseUrl}\nkey ${this.supabaseKey}`);
   }
@@ -30,6 +37,7 @@ export class UploadService {
 
       const ext = `${file.originalname}`.split('.')[1] || 'png';
       const name = `${randomUUID()}.${ext}`;
+      const url = `${this.storage.url}/${this.storage.bucket}/${name}`;
 
       this.logger.debug(name);
 
@@ -39,7 +47,8 @@ export class UploadService {
           upsert: true,
           contentType: file.mimetype,
         });
-      return { ...result, name };
+        
+      return { ...result, name, url };
     } catch (err) {
       this.logger.error(err);
     }
@@ -54,8 +63,9 @@ export class UploadService {
 
       const ext = `${file.originalname}`.split('.')[1] || 'png';
       const name = `${randomUUID()}.${ext}`;
+      const url = `${this.storage.url}/${this.storage.bucket}/${name}`;
 
-      this.logger.debug(name);
+      this.logger.debug(`url ${url}\nname ${name}`);
 
       const result = await supabase.storage
         .from('register')
@@ -63,7 +73,7 @@ export class UploadService {
           upsert: true,
           contentType: file.mimetype,
         });
-      return { ...result, name };
+      return { ...result, name, url };
     } catch (err) {
       this.logger.error(err);
     }

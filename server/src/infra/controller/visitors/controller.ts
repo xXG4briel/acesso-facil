@@ -49,7 +49,7 @@ export class VisitorsController {
     // body.birthday = new Date(body.birthday);
     // body.password = hashSync(body.password);
 
-    const { data, error, name } = await this.uploadService.upload(file);
+    const { data, error, name, url } = await this.uploadService.upload(file);
 
     // const result = await this.visitorsService.create(body);
 
