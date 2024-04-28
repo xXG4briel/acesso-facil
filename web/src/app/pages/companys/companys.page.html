@@ -1,6 +1,11 @@
 <ion-header color="primary">
   <ion-toolbar color="primary">
-    <ion-title>Dados da empresa</ion-title>
+    <ion-item color="primary">
+      <ion-thumbnail>
+        <img [src]="company.avatar ? company.avatar : 'https://us.123rf.com/450wm/anatolir/anatolir2011/anatolir201105528/159470802-jurist-avatar-icon-flat-style.jpg?ver\u003d6' " />
+      </ion-thumbnail>
+      <ion-label class="ion-padding-start">{{ company.name ? company.name : 'Empresa não encontrada' }}</ion-label>
+    </ion-item>
   </ion-toolbar>
 </ion-header>
 
@@ -25,94 +30,93 @@
 
     <ion-list>
       <ng-container *ngIf="type == 'wait' && visitorsWaiting?.length">
-        <ion-item *ngFor="let visitor of visitorsWaiting">
+        <ion-item *ngFor="let visit of visitorsWaiting">
           <ion-thumbnail>
-            <img src="https://img.freepik.com/psd-premium/avatar-de-desenho-animado-3d-do-engenheiro-com-capacete-de-seguranca_1020-5136.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1712620800&semt=ais" />
+            <img [src]="visit.visitor?.url ? visit.visitor.url : 'https://img.freepik.com/psd-premium/avatar-de-desenho-animado-3d-do-engenheiro-com-capacete-de-seguranca_1020-5136.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1712620800&semt=ais'" />
           </ion-thumbnail>
 
           <ion-label class="ion-padding-start">
-            <h1>{{ visitor.name }} - {{ visitor.role }} </h1>
-            <p>{{ visitor.phone }}</p>
+            <h1>{{ visit.visitor.fullName }} - {{ visit.visitor.role }} </h1>
+            <p>{{ visit.visitor.phone }}</p>
           </ion-label>
 
           <ion-label>
-            <p>{{ visitor.description }}</p>
+            <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
           </ion-label>
 
-
-          <ion-button (click)="onClick()" color="success">
+          <ion-button (click)="approveVisit(visit.id)" color="success">
             <ion-icon slot="icon-only" name="checkmark"></ion-icon>
           </ion-button>
-          <ion-button (click)="onClick()" color="danger">
+          <ion-button (click)="approveVisit(visit.id, false)" color="danger">
             <ion-icon slot="icon-only" name="close"></ion-icon>
           </ion-button>
-          <ion-button (click)="onClick()" fill="clear" shape="round">
+          <ion-button (click)="showVisit(visit)" fill="clear" shape="round">
             <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
           </ion-button>
 
         </ion-item>
       </ng-container>
       <ng-container *ngIf="type == 'approve' && visitorsApproved?.length">
-        <ion-item *ngFor="let visitor of visitorsApproved">
+        <ion-item *ngFor="let visit of visitorsApproved">
           <ion-thumbnail>
-            <img src="https://img.freepik.com/psd-premium/avatar-de-desenho-animado-3d-do-engenheiro-com-capacete-de-seguranca_1020-5136.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1712620800&semt=ais" />
+            <img [src]="visit.visitor?.url ? visit.visitor.url : 'https://img.freepik.com/psd-premium/avatar-de-desenho-animado-3d-do-engenheiro-com-capacete-de-seguranca_1020-5136.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1712620800&semt=ais'" />
           </ion-thumbnail>
 
           <ion-label class="ion-padding-start">
-            <h1>{{ visitor.name }} - {{ visitor.role }} </h1>
-            <p>{{ visitor.phone }}</p>
+            <h1>{{ visit.visitor.fullName }} - {{ visit.visitor.role }} </h1>
+            <p>{{ visit.visitor.phone }}</p>
           </ion-label>
 
           <ion-label>
-            <p>{{ visitor.description }}</p>
+            <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
           </ion-label>
 
 
-          <ion-button (click)="onClick()" fill="clear" shape="round">
+          <ion-button (click)="showVisit(visit)" fill="clear" shape="round">
             <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
           </ion-button>
 
         </ion-item>
       </ng-container>
       <ng-container *ngIf="type == 'reject' && visitorsReject?.length">
-        <ion-item *ngFor="let visitor of visitorsReject">
+        <ion-item *ngFor="let visit of visitorsReject">
           <ion-thumbnail>
-            <img src="https://img.freepik.com/psd-premium/avatar-de-desenho-animado-3d-do-engenheiro-com-capacete-de-seguranca_1020-5136.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1712620800&semt=ais" />
+            <img [src]="visit.visitor?.url ? visit.visitor.url : 'https://img.freepik.com/psd-premium/avatar-de-desenho-animado-3d-do-engenheiro-com-capacete-de-seguranca_1020-5136.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1712620800&semt=ais'" />
           </ion-thumbnail>
 
           <ion-label class="ion-padding-start">
-            <h1>{{ visitor.name }} - {{ visitor.role }} </h1>
-            <p>{{ visitor.phone }}</p>
+            <h1>{{ visit.visitor.fullName }} - {{ visit.visitor.role }} </h1>
+            <p>{{ visit.visitor.phone }}</p>
           </ion-label>
 
           <ion-label>
-            <p>{{ visitor.description }}</p>
+            <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
           </ion-label>
 
 
-          <ion-button (click)="onClick()" fill="clear" shape="round">
+          <ion-button (click)="showVisit(visit)" fill="clear" shape="round">
             <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
           </ion-button>
 
         </ion-item>
       </ng-container>
       <ng-container *ngIf="type == 'finish' && visitorsFinish?.length">
-        <ion-item *ngFor="let visitor of visitorsFinish">
+        <ion-item *ngFor="let visit of visitorsFinish">
           <ion-thumbnail>
-            <img src="https://img.freepik.com/psd-premium/avatar-de-desenho-animado-3d-do-engenheiro-com-capacete-de-seguranca_1020-5136.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1712620800&semt=ais" />
+            <img [src]="visit.visitor?.url ? visit.visitor.url : 'https://img.freepik.com/psd-premium/avatar-de-desenho-animado-3d-do-engenheiro-com-capacete-de-seguranca_1020-5136.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1712620800&semt=ais'" />
           </ion-thumbnail>
 
           <ion-label class="ion-padding-start">
-            <h1>{{ visitor.name }} - {{ visitor.role }} </h1>
-            <p>{{ visitor.phone }}</p>
+            <h1>{{ visit.visitor.fullName }} - {{ visit.visitor.role }} </h1>
+            <p>{{ visit.visitor.phone }}</p>
           </ion-label>
 
           <ion-label>
-            <p>{{ visitor.description }}</p>
+            <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
           </ion-label>
 
 
-          <ion-button (click)="onClick()" fill="clear" shape="round">
+          <ion-button (click)="showVisit(visit)" fill="clear" shape="round">
             <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
           </ion-button>
 

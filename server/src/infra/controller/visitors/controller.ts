@@ -39,33 +39,36 @@ export class VisitorsController {
       }),
     )
     file: Express.Multer.File,
+    @Body() body: CreateDTO
   ) {
-    // const found = await this.visitorsService.findByEmailOrIdentity(body);
-    // if (found) {
-    //   throw new BadRequestException(
-    //     `${found?.email == body.email ? 'E-mail' : found.identityType.toUpperCase()} já cadastrado`,
-    //   );
-    // }
-    // body.birthday = new Date(body.birthday);
-    // body.password = hashSync(body.password);
+    const found = await this.visitorsService.findByEmailOrIdentity(body);
+    if (found) {
+      throw new BadRequestException(
+        `${found?.email == body.email ? 'E-mail' : found.identityType.toUpperCase()} já cadastrado`,
+      );
+    }
+    body.birthday = new Date(body.birthday);
+    body.password = hashSync(body.password);
 
     const { data, error, name, url } = await this.uploadService.upload(file);
+    
+    if (isEmpty(data) || error) {
+      throw new InternalServerErrorException(
+        'Não foi possível fazer o upload da sua imagem',
+      );
+    }
 
-    // const result = await this.visitorsService.create(body);
+    body.url = url;
 
-    // if (isEmpty(data) || error) {
-    //   return new InternalServerErrorException(
-    //     'Não foi possível fazer o upload da sua imagem',
-    //   );
-    // }
+    const result = await this.visitorsService.create(body);
+      
+    if (!result) {
+      throw new InternalServerErrorException(
+        'Não foi possível fazer o registro',
+      );
+    }
 
-    // if (!result) {
-    //   throw new InternalServerErrorException(
-    //     'Não foi possível fazer o registro',
-    //   );
-    // }
-
-    // return result;
+    return result;
   }
 
   @Post('/register')

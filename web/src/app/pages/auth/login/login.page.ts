@@ -32,7 +32,11 @@ export class LoginPage implements OnInit {
   }
   segmentChanged(e: any) {
     this.type = e.target.value
-    this.loginForm.patchValue(({ email: '', password: ''  }));
+    this.cleanForm();
+  }
+
+  private cleanForm() {
+    this.loginForm.patchValue(({ email: '', password: '' }));
     this.loginForm.markAsUntouched();
   }
 
@@ -49,10 +53,13 @@ export class LoginPage implements OnInit {
       next: (value: any) => {
 
         localStorage.setItem('access_token', JSON.stringify(value.access_token));
+        localStorage.setItem('company', JSON.stringify(value.me));
 
         this.router.navigate([`/${this.type}`]);
 
         loading.dismiss();
+
+        this.cleanForm();
       },
       error: (err) => {
         const { error } = err;

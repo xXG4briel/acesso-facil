@@ -39,15 +39,15 @@ export class UploadService {
       const name = `${randomUUID()}.${ext}`;
       const url = `${this.storage.url}/${this.storage.bucket}/${name}`;
 
-      this.logger.debug(name);
-
       const result = await supabase.storage
         .from('register')
         .upload(name, buffer, {
           upsert: true,
           contentType: file.mimetype,
-        });
-        
+      });
+      
+      this.logger.debug(JSON.stringify(result, null, 2))
+
       return { ...result, name, url };
     } catch (err) {
       this.logger.error(err);

@@ -15,6 +15,7 @@ import { CompanysPage } from './companys.page';
     IonicModule,
     CompanysPageRoutingModule
   ],
+  providers: [],
   declarations: [CompanysPage]
 })
 export class CompanysPageModule {}

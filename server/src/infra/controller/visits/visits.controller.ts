@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, InternalServerErrorException, Logger, Param, Patch, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, InternalServerErrorException, Logger, Param, Patch, Post, Request, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { get, isEmpty } from 'lodash';
 import { UploadService } from 'src/infra/services/upload/upload.service';
@@ -14,13 +14,15 @@ export class VisitsController {
     private readonly uploadService: UploadService
     ) {}
 
-  @Get('/companys/:id')
-  async index(@Param('id') id: string) {
+  @Get('/companys')
+  async index(@Request() req: any) {
     try {
 
-      this.logger.debug(`companyId: ${id}`);
+      const { sub, type } = req.decoded;
+      
+      this.logger.debug(`companyId: ${sub}`);
 
-      return await this.visitsService.findAll(id);
+      return await this.visitsService.findAll(sub);
     } catch (err) {
       throw new InternalServerErrorException('Error retrieving visits', err);
     }

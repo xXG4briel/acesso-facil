@@ -12,10 +12,24 @@ export class VisitsService {
       const [waiting, approved, rejected, finished] = await Promise.all([
         this.clientService.visit.findMany({
           where: { companyId, approved: null },
+          include: { visitor: { select: { fullName: true, url: true, role: true, phone: true }} },
+          orderBy: [ { scheduledDate: 'asc' } ]
         }),
-        this.clientService.visit.findMany({ where: { companyId, approved: { equals: true } } }),
-        this.clientService.visit.findMany({ where: { companyId, approved: { equals: false } } }),
-        this.clientService.visit.findMany({ where: { companyId, finished: { equals: true } } }),
+        this.clientService.visit.findMany({ 
+          where: { companyId, approved: { equals: true } }, 
+          include: { visitor: { select: { fullName: true, url: true, role: true, phone: true }} },
+          orderBy: [ { scheduledDate: 'asc' } ]
+        }),
+        this.clientService.visit.findMany({ 
+          where: { companyId, approved: { equals: false } }, 
+          include: { visitor: { select: { fullName: true, url: true, role: true, phone: true }} },
+          orderBy: [ { scheduledDate: 'asc' } ]
+        }),
+        this.clientService.visit.findMany({ 
+          where: { companyId, finished: { equals: true } },          
+          include: { visitor: { select: { fullName: true, url: true, role: true, phone: true }} },
+          orderBy: [ { scheduledDate: 'asc' } ]
+        }),
       ]);
 
       return { waiting, approved, rejected, finished };
@@ -37,6 +51,7 @@ export class VisitsService {
       return this.clientService.visit.create({ data: {
         scheduledDate: new Date(),
         visitorId: 'bbb0b44c-9c00-4a30-9186-87e0a9449dc8',
+        description: '123456',
         files: ['1', '2', '3'],
         companyId: '9b86dc39-84c6-48f0-b48a-abec0a047f4b'
       } });

@@ -51,11 +51,11 @@ Content-Type: application/json
 }
 
 ##############
-GET http://localhost:3000/visits/companys/9b86dc39-84c6-48f0-b48a-abec0a047f4b
+GET http://localhost:3000/visits/companys/dd303319-02e5-4349-bf4b-aa773d2718b7
 Content-Type: application/json
 
 ##############
-GET http://localhost:3000/visits/bbb0b44c-9c00-4a30-9186-87e0a9449dc8
+GET http://localhost:3000/visits/dd303319-02e5-4349-bf4b-aa773d2718b7
 Content-Type: application/json
 ##############
 PATCH http://localhost:3000/visits/bbb0b44c-9c00-4a30-9186-87e0a9449dc8
@@ -89,8 +89,8 @@ POST http://localhost:3000/auth/companys
 Content-Type: application/json
 
 {
-    "password": "1234",
-    "email": "teste@gmail.com"
+    "password": "123456",
+    "email": "info@tesla.com"
 }
 ##############
 POST http://localhost:3000/auth/visitors

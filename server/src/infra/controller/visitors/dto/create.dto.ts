@@ -36,6 +36,13 @@ export class CreateDTO {
   @Type(() => AddresDTO)
   @IsNotEmpty()
   address: AddresDTO;
+  url: string;
+  @IsNotEmpty()
+  @IsString()
+  phone: string; 
+  @IsNotEmpty()
+  @IsString()
+  role: string;
   companyId: string;
   createdAt: string;
   updatedAt: string;

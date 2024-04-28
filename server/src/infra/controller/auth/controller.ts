@@ -26,22 +26,26 @@ export class AuthController {
     @Body() body: LoginPayload,
   ): Promise<{ access_token: string }> {
     const found = await this.companysService.findByEmailOrIdentity(body);
+    const me = found ? { name: found.name, avatar: found.url } : {};
 
-    return this.handleAccessToken(found, body, 'companys');
+
+    return this.handleAccessToken(found, body, 'companys', me);
   }
   @Post('/visitors')
   async loginVisitors(
     @Body() body: LoginPayload,
   ): Promise<{ access_token: string }> {
     const found = await this.visitorsService.findByEmailOrIdentity(body);
+    const me = found ? { name: found.fullName, avatar: found.url } : {};
 
-    return this.handleAccessToken(found, body, 'visitors');
+    return this.handleAccessToken(found, body, 'visitors', me);
   }
 
   private async handleAccessToken(
     found: { password: string; email: string; id: string },
     body: LoginPayload,
     type: 'visitors' | 'companys',
+    me: object
   ) {
     this.logger.debug(`params ${JSON.stringify(body, null, 2)}`);
 
@@ -54,6 +58,6 @@ export class AuthController {
     const payload = { sub: id, email, type };
     this.logger.log(`user authenticate ${JSON.stringify(payload, null, 2)}`);
 
-    return { access_token: await this.jwtService.signAsync(payload) };
+    return { access_token: await this.jwtService.signAsync(payload), me };
   }
 }

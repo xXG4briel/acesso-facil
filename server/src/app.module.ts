@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './infra/services';
@@ -8,6 +8,7 @@ import { AuthController } from './infra/controller/auth/controller';
 import { JwtModule } from '@nestjs/jwt';
 import { VisitsController } from './infra/controller/visits/visits.controller';
 import { VisitsService } from './infra/services/visits/visits.service';
+import { AuthMiddleware } from './middleware';
 
 @Module({
   imports: [
@@ -28,4 +29,8 @@ import { VisitsService } from './infra/services/visits/visits.service';
   providers: [AppService, VisitsService],
   exports: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('*')
+  }
+}

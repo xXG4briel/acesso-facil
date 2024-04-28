@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { AlertService } from 'src/app/services/alert.service';
 import { CompanysService } from 'src/app/services/companys.service';
+import { VisitsService } from 'src/app/services/visits.service';
+import { ModalExampleComponent } from './modal-visit-info';
 
 @Component({
   selector: 'app-companys',
@@ -16,48 +19,89 @@ export class CompanysPage implements OnInit {
   visitorsReject: any = []
   visitorsFinish: any = []
 
+  company: { name: string, avatar: string };
+
   constructor(
     private readonly companyService: CompanysService,
+    private readonly modalCtrl: ModalController,
+    private readonly visitsService: VisitsService,
     private readonly alertService: AlertService
   ) { }
 
-  ngOnInit() {
-    this.visitorsWaiting = [
-      { name: 'Gabriel', role: 'Engenheiro', phone: '+5511912341234', description: '11/01/2024' },
-      { name: 'Marcos', role: 'Engenheiro', phone: '+5511912341234', description: '11/01/2024' },
-      { name: 'Ayslan', role: 'Engenheiro', phone: '+5511912341234', description: '11/01/2024' },
-    ]
-    this.visitorsApproved = [
-      { name: 'Lucas', role: 'Engenheiro', phone: '+5511912341234', description: '11/01/2024' },
-    ]
+  async ngOnInit() {
+    this.getCompany();
+
+    await this.getVisits();
   }
 
-  onClick(){ }
+  private getCompany() {
+    const storage = localStorage.getItem('company');
 
-  segmentChanged(e: any){
-    this.type = e.target.value;
+    this.company = storage ? JSON.parse(storage) : {};
+
   }
 
-  async getVisitors() {
+  private async getVisits() {
     const loading = await this.alertService.showLoading();
 
-    this.companyService.getVisitors<any>().subscribe({
-      next: (value) => {
-        this.visitorsWaiting = value.waiting;
-        this.visitorsApproved = value.approved;
-        this.visitorsReject = value.rejected;
-        this.visitorsFinish = value.finished;
+    this.visitsService.getVisits<{ approved: any[]; finished: any[]; rejected: any[]; waiting: any[]; }>().subscribe({
+      next: ({ approved, finished, rejected, waiting }) => {
+
+        this.visitorsApproved = approved;
+        this.visitorsFinish = finished;
+        this.visitorsReject = rejected;
+        this.visitorsWaiting = waiting;
 
         loading.dismiss();
       },
       error: (err) => {
         const { error } = err;
-        
+
         loading.dismiss();
 
-        this.alertService.alert({ header: 'Erro', message: error.message })
+        this.alertService.alert({ header: 'Erro', message: error.message });
+      }
+    });
+  }
+
+  async approveVisit(visitId: string, approved = true) {
+    const loading = await this.alertService.showLoading();
+
+    this.visitsService.approveVisit(visitId, { approved }).subscribe({
+      next: (value) => {
+        loading.dismiss();
+
+        this.getVisits();
+      },
+      error: (err) => {
+        const { error } = err;
+
+        loading.dismiss();
+
+        this.alertService.alert({ header: 'Erro', message: error.message });
       }
     })
   }
+
+  async showVisit(visit?: any){
+
+    const modal = await this.modalCtrl.create({
+      component: ModalExampleComponent,
+      componentProps: {
+        visit
+      }
+    })
+
+    modal.present();
+
+    // console.log(visit)
+    // return modal.then((v) => v.)
+   }
+
+  async segmentChanged(e: any){
+    this.type = e.target.value;
+    await this.getVisits()
+  }
+
 
 }
