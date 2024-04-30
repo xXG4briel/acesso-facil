@@ -35,7 +35,7 @@ export class CompanysPage implements OnInit {
   }
 
   private getCompany() {
-    const storage = localStorage.getItem('company');
+    const storage = localStorage.getItem('me');
 
     this.company = storage ? JSON.parse(storage) : {};
 

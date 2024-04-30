@@ -7,9 +7,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VisitorsPage implements OnInit {
 
+  visitor: { name: string, avatar: string };
+
   constructor() { }
 
   ngOnInit() {
+    this.getVisitor();
+  }
+
+  getVisitor() {
+    const storage = localStorage.getItem('me');
+    this.visitor = storage ? JSON.parse(storage) : {};
+  }
+
+  getVisits() {
+
   }
 
 }

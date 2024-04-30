@@ -53,7 +53,7 @@ export class LoginPage implements OnInit {
       next: (value: any) => {
 
         localStorage.setItem('access_token', JSON.stringify(value.access_token));
-        localStorage.setItem('company', JSON.stringify(value.me));
+        localStorage.setItem('me', JSON.stringify(value.me));
 
         this.router.navigate([`/${this.type}`]);
 
