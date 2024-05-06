@@ -1,12 +1,19 @@
-import { IsBoolean, IsDateString, IsNotEmpty, IsString } from "class-validator";
+import { IsBoolean, IsDateString, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class CreateVisitDTO {
     @IsNotEmpty()
     @IsString()
     companyId: string;
     @IsNotEmpty()
+    description: string;
+    @IsNotEmpty()
     @IsDateString()
-    scheduledDate: string;
+    scheduledDate: Date | string;
+
+    @IsOptional()
+    files: any[];
+    @IsOptional()
+    visitorId: string;
 
     constructor(data?: Partial<CreateVisitDTO>) {
         Object.assign(this, data)

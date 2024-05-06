@@ -1,20 +1,24 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
 import { VisitorsPageRoutingModule } from './visitors-routing.module';
 
 import { VisitorsPage } from './visitors.page';
+import { CardVisitsComponent } from './components/card-visits/card-visits.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    VisitorsPageRoutingModule
+    VisitorsPageRoutingModule,
+    ReactiveFormsModule
   ],
-  declarations: [VisitorsPage]
+  declarations: [ VisitorsPage, CardVisitsComponent ],
+  providers: [],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class VisitorsPageModule {}

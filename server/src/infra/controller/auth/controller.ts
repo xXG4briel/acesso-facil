@@ -51,7 +51,7 @@ export class AuthController {
 
     if (!found || !compareSync(body.password, found.password)) {
       this.logger.warn(`${!found ? 'User not found' : 'Invalid password'}`);
-      throw new UnauthorizedException('Usuário ou senha incorreta.');
+      throw new UnauthorizedException(`Usuário(${type == 'visitors' ? 'Visitante' : 'Empresa'}) ou senha incorreta.`);
     }
 
     const { email, id } = found;

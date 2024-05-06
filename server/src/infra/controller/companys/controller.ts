@@ -34,4 +34,8 @@ export class CompanysController {
 
     return result;
   }
+  @Get()
+  async findAll() {
+    return await this.companysService.findAll();
+  }
 }

@@ -2,15 +2,15 @@ main {
   max-width: 1000px;
   margin: 0 auto;
   ion-card {
-    border-radius: 12px 0 0 12px;
-    .reject {
-      border-left: 4px solid red;
-    }
-    .approved {
-      border-left: 4px solid green;
-    }
-    .waiting {
-      border-left: 4px solid var(--ion-color-primary);
-    }
+    // border-radius: 12px 0 0 12px;
+    // .reject {
+    //   border-left: 4px solid red;
+    // }
+    // .approved {
+    //   border-left: 4px solid green;
+    // }
+    // .waiting {
+    //   border-left: 4px solid var(--ion-color-primary);
+    // }
   }
 }

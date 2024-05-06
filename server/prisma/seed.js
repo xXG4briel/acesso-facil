@@ -1,18 +1,27 @@
 const { PrismaClient } = require('@prisma/client')
 const bc = require('bcrypt-nodejs');
 const { hashSync } = bc;
-const crypto = require('crypto')
 
 const prisma = new PrismaClient({ log: ['query'] });
 
 
 async function main() {
+
+  await prisma.$queryRaw`TRUNCATE "visitors", "visits", "companys"`;
+
   //#region visitors
+  const visitorsDefaults = {
+    elonMusk: 'daab9f5e-7afa-4407-9d80-8342870c8bd6',
+    billGates: 'a9fd259b-bb5e-4ba9-be72-bafdf721427d',
+    ayrtonSenna: 'cc556f97-b357-4a50-b157-d648514c62b4',
+    gabrielFAM: '84754299-ac7b-44af-9345-d52f729a13ce'
+  }
   const visitors = [
     // Elon Musk
     {
       where: { email: 'elonmusk@outlook.com' },
       create: {
+        id: visitorsDefaults.elonMusk,
         address: {
           street: 'Rua dos Inventores, 123',
           city: 'Los Angeles',
@@ -36,6 +45,7 @@ async function main() {
     {
       where: { email: 'billgates@hotmail.com' },
       create: {
+        id: visitorsDefaults.billGates,
         address: {
           street: 'One Microsoft Way',
           city: 'Redmond',
@@ -59,6 +69,7 @@ async function main() {
     {
       where: { email: 'ayrtonsenna@gmail.com' },
       create: {
+        id: visitorsDefaults.ayrtonSenna,
         address: {
           street: 'Av. Ayrton Senna, 555',
           city: 'São Paulo',
@@ -82,6 +93,7 @@ async function main() {
     {
       where: { email: 'gabriel.computacao@fam.com.br' },
       create: {
+        id: visitorsDefaults.gabrielFAM,
         address: {
           street: 'Av. das Comunicações, 123',
           city: 'São Paulo',
@@ -116,12 +128,19 @@ async function main() {
   //#endregion
 
   //#region companys
+  const companysDefaults = {
+    intel: '23448163-d545-439f-9f38-5b4d8d2977d2',
+    tesla: 'dd303319-02e5-4349-bf4b-aa773d2718b7',
+    samsung: '3417fd9a-d4c5-4fd2-bd0b-d5cbb7d37e34',
+    petrobras: '6b505a0d-b530-4b76-b7b8-fefbf4424eb0',
+    vale: '8860aad2-6f58-41d0-9e12-89daa42d3f9a'
+  }
   const companys = [
     {
       update: { },
-      where: { id: '23448163-d545-439f-9f38-5b4d8d2977d2' },
+      where: { id: companysDefaults.intel },
       create: {
-        id: '23448163-d545-439f-9f38-5b4d8d2977d2',
+        id: companysDefaults.intel,
         name: 'Intel',
         email: 'info@intel.com',
         identity: '12345678901235',
@@ -132,36 +151,38 @@ async function main() {
             city: 'Santa Clara',
             state: 'CA',
             country: 'US',
+            number: 5,
             zipCode: '95054',
         },
       }
     },
     {
       update: {
-        url: 'https://static.vecteezy.com/ti/vetor-gratis/p3/20336735-tesla-logotipo-tesla-icone-transparente-png-gratis-vetor.jpg'
       },
-      where: { id: 'dd303319-02e5-4349-bf4b-aa773d2718b7' },
+      where: { id: companysDefaults.tesla },
       create: {
-        id: 'dd303319-02e5-4349-bf4b-aa773d2718b7',
+        id: companysDefaults.tesla,
         name: 'Tesla',
         email: 'info@tesla.com',
         identity: '12345678901236',
         identityType: 'cnpj',
         password: hashSync('123456'),
+        url: 'https://static.vecteezy.com/ti/vetor-gratis/p3/20336735-tesla-logotipo-tesla-icone-transparente-png-gratis-vetor.jpg',
         address: {
             street: '123 Electric Avenue',
             city: 'Palo Alto',
             state: 'CA',
             country: 'US',
+            number: 42,
             zipCode: '94304',
         },
       }
     },
     {
       update: {},
-      where: { id: '3417fd9a-d4c5-4fd2-bd0b-d5cbb7d37e34' },
+      where: { id: companysDefaults.samsung },
       create: {
-        id: '3417fd9a-d4c5-4fd2-bd0b-d5cbb7d37e34',
+        id: companysDefaults.samsung,
         name: 'Samsung',
         email: 'info@samsung.com',
         identity: '12345678901237',
@@ -172,15 +193,16 @@ async function main() {
             city: 'Seoul',
             state: '',
             country: 'KR',
+            number: 65,
             zipCode: '123456',
         },
       }
     },
     {
       update: {},
-      where: { id: '6b505a0d-b530-4b76-b7b8-fefbf4424eb0' },
+      where: { id: companysDefaults.petrobras },
       create: {
-        id: '6b505a0d-b530-4b76-b7b8-fefbf4424eb0',
+        id: companysDefaults.petrobras,
         name: 'Petrobras',
         email: 'info@petrobras.com',
         identity: '12345678901238',
@@ -191,15 +213,16 @@ async function main() {
             city: 'Rio de Janeiro',
             state: 'RJ',
             country: 'BR',
+            number: 77,
             zipCode: '20031-120',
         },
       }
     },
     {
       update: {},
-      where: { id: '8860aad2-6f58-41d0-9e12-89daa42d3f9a' },
+      where: { id: companysDefaults.vale },
       create: {
-        id: '8860aad2-6f58-41d0-9e12-89daa42d3f9a',
+        id: companysDefaults.vale,
         name: 'Vale',
         email: 'info@vale.com',
         identity: '12345678901239',
@@ -210,6 +233,7 @@ async function main() {
             city: 'Rio de Janeiro',
             state: 'RJ',
             country: 'BR',
+            number: 89,
             zipCode: '20030-002',
         },
       }
@@ -221,14 +245,6 @@ async function main() {
       prisma.company.upsert({ create, update, where }))
   )
   //#endregion
-
-  const companyId = 'dd303319-02e5-4349-bf4b-aa773d2718b7';
-
-  const visitorCreated = await prisma.visitor.findMany({ select: { id: true } });
-  const visitorIds = visitorCreated.map(({ id }) => id);
-  const visitorsLen = visitorIds.length;
-
-  const randomVisitor = () => parseInt(Math.random() * visitorsLen);
 
   const visitsId = [
     'c05ca1da-e2b1-469c-bce5-79ae13939093',
@@ -253,18 +269,14 @@ async function main() {
       where: { id: visitsId[0] },
       create: {
         id: visitsId[0],
-        visitorId: visitorIds[randomVisitor()],
-        companyId,
-        description: 'Lorem ipsum',
+        visitorId: visitorsDefaults.ayrtonSenna,
+        companyId: companysDefaults.tesla,
+        approved: false,
+        description: 'Verificar Carro tesla',
         scheduledDate: new Date(2024, 6, 21, 5, 20),
-        files: [
-          { type: 'txt', url: '1234' }
-        ],
+        files:[{"name": "CREA.pdf"}, {"name": "RG.pdf"}],
       },
       update: { 
-        files:[{"name": "Nota fiscal.pdf"}, {"name": "Layout técnico.pdf"}, {"name": "RG.pdf"}],
-        description: 'Verificar Carro tesla',
-        scheduledDate: new Date(2024, 4, 21, 5, 20),
       }
     },
     // 1
@@ -272,18 +284,13 @@ async function main() {
       where: { id: visitsId[1] },
       create: {
         id: visitsId[1],
-        visitorId: visitorIds[randomVisitor()],
-        companyId,
-        description: 'Lorem ipsum',
+        visitorId: visitorsDefaults.ayrtonSenna,
+        companyId: companysDefaults.tesla,
+        description: 'Opinião Design do tesla',
         scheduledDate: new Date(2024, 6, 21, 5, 45),
-        files: [
-          { type: 'txt', url: '1234' }
-        ],
+        files:[{"name": "RG.pdf"}],
       },
       update: { 
-        files:[{"name": "Nota fiscal.pdf"}, {"name": "Layout técnico.pdf"}, {"name": "RG.pdf"}],
-        description: 'Verificar Carro tesla',
-        scheduledDate: new Date(2024, 4, 21, 5, 45),
       }
     },
     // 2
@@ -291,18 +298,13 @@ async function main() {
       where: { id: visitsId[2] },
       create: {
         id: visitsId[2],
-        visitorId: visitorIds[randomVisitor()],
-        companyId,
-        description: 'Lorem ipsum',
+        visitorId: visitorsDefaults.elonMusk,
+        companyId: companysDefaults.tesla,
+        description: 'Visita',
         scheduledDate: new Date(2024, 6, 21, 6, 0),
-        files: [
-          { type: 'txt', url: '1234' }
-        ],
+        files:[{"name": "RG.pdf"}],
       },
       update: { 
-        files:[{"name": "Nota fiscal.pdf"}, {"name": "Layout técnico.pdf"}, {"name": "RG.pdf"}],
-        description: 'Verificar Carro tesla',
-        scheduledDate: new Date(2024, 4, 21, 6, 0),
       }
     },
     // 3
@@ -310,18 +312,13 @@ async function main() {
       where: { id: visitsId[3] },
       create: {
         id: visitsId[3],
-        visitorId: visitorIds[randomVisitor()],
-        companyId,
-        description: 'Lorem ipsum',
+        visitorId: visitorsDefaults.gabrielFAM,
+        companyId: companysDefaults.tesla,
+        description: 'Fazer manunteção no servidor',
         scheduledDate: new Date(2024, 6, 21, 5, 20),
-        files: [
-          { type: 'txt', url: '1234' }
-        ],
+        files:[{"name": "Documento.pdf"}, {"name": "Habilitação.pdf"}],
       },
       update: { 
-        files:[{"name": "Nota fiscal.pdf"}, {"name": "Layout técnico.pdf"}, {"name": "RG.pdf"}],
-        description: 'Verificar Carro tesla',
-        scheduledDate: new Date(2024, 4, 21, 5, 20),
       }
     },
     // 4
@@ -329,18 +326,15 @@ async function main() {
       where: { id: visitsId[4] },
       create: {
         id: visitsId[4],
-        visitorId: visitorIds[randomVisitor()],
-        companyId,
-        description: 'Lorem ipsum',
+        visitorId: visitorsDefaults.ayrtonSenna,
+        companyId: companysDefaults.petrobras,
+        description: 'Test drive F1 Tesla',
+        approved: true,
+        finished: true,
         scheduledDate: new Date(2024, 6, 21, 7, 15),
-        files: [
-          { type: 'txt', url: '1234' }
-        ],
+        files:[{"name": "Solicitacao teste.pdf"}, {"name": "Carteira.pdf"}, {"name": "RG.pdf"}],
       },
       update: { 
-        files:[{"name": "Nota fiscal.pdf"}, {"name": "Layout técnico.pdf"}, {"name": "RG.pdf"}],
-        description: 'Verificar Carro tesla',
-        scheduledDate: new Date(2024, 4, 21, 7, 15),
       }
     },
     // 5
@@ -348,19 +342,14 @@ async function main() {
       where: { id: visitsId[5] },
       create: {
         id: visitsId[5],
-        visitorId: visitorIds[randomVisitor()],
-        companyId,
+        visitorId: visitorsDefaults.billGates,
+        companyId: companysDefaults.tesla,
         approved: true,
-        description: 'Lorem ipsum',
+        description: 'Parceira com a tesla',
         scheduledDate: new Date(2024, 4, 22, 5, 30),
-        files: [
-          { type: 'txt', url: '1234' }
-        ],
+        files:[{"name": "Documentacao.pdf"}, {"name": "RG.pdf"}],
       },
       update: { 
-        files:[{"name": "Nota fiscal.pdf"}, {"name": "Layout técnico.pdf"}, {"name": "RG.pdf"}],
-        description: 'Verificar Carro tesla',
-        scheduledDate: new Date(2024, 4, 22, 5, 30),
       }
     },
 
@@ -371,19 +360,14 @@ async function main() {
       where: { id: visitsId[6] },
       create: {
         id: visitsId[6],
-        visitorId: visitorIds[randomVisitor()],
-        companyId,
+        visitorId: visitorsDefaults.elonMusk,
+        companyId: companysDefaults.tesla,
         approved: true,
-        description: 'Lorem ipsum',
+        description: 'Visita',
         scheduledDate: new Date(2024, 6, 21, 5, 20),
-        files: [
-          { type: 'txt', url: '1234' }
-        ],
+        files:[{"name": "RG.pdf"}],
       },
       update: { 
-        files:[{"name": "Nota fiscal.pdf"}, {"name": "Layout técnico.pdf"}, {"name": "RG.pdf"}],
-        description: 'Verificar Carro tesla',
-        scheduledDate: new Date(2024, 4, 21, 5, 20),
       }
     },
     // 7
@@ -391,19 +375,14 @@ async function main() {
       where: { id: visitsId[7] },
       create: {
         id: visitsId[7],
-        visitorId: visitorIds[randomVisitor()],
-        companyId,
+        visitorId: visitorsDefaults.ayrtonSenna,
+        companyId: companysDefaults.tesla,
         approved: true,
-        description: 'Lorem ipsum',
+        description: 'Reunião',
         scheduledDate: new Date(2024, 6, 21, 8, 30),
-        files: [
-          { type: 'txt', url: '1234' }
-        ],
+        files:[{"name": "RG.pdf"}],
       },
       update: { 
-        files:[{"name": "Nota fiscal.pdf"}, {"name": "Layout técnico.pdf"}, {"name": "RG.pdf"}],
-        description: '4erificar Carro tesla',
-                  
       }
     },
 
@@ -414,19 +393,14 @@ async function main() {
       where: { id: visitsId[8] },
       create: {
         id: visitsId[8],
-        visitorId: visitorIds[randomVisitor()],
-        companyId,
+        visitorId: visitorsDefaults.gabrielFAM,
+        companyId: companysDefaults.tesla,
         approved: false,
-        description: 'Lorem ipsum',
+        description: 'Reunião com o Elon Musk',
         scheduledDate: new Date(2024, 6, 21, 5, 45),
-        files: [
-          { type: 'txt', url: '1234' }
-        ],
+        files:[{"name": "Documentacao.pdf"}, {"name": "RG.pdf"}],
       },
       update: { 
-        files:[{"name": "Nota fiscal.pdf"}, {"name": "Layout técnico.pdf"}, {"name": "RG.pdf"}],
-        description: 'Verificar Carro tesla',
-        scheduledDate: new Date(2024, 4, 21, 5, 45),
       }
     },
     // 9
@@ -434,19 +408,14 @@ async function main() {
       where: { id: visitsId[9] },
       create: {
         id: visitsId[9],
-        visitorId: visitorIds[randomVisitor()],
-        companyId,
+        visitorId: visitorsDefaults.billGates,
+        companyId: companysDefaults.tesla,
         approved: false,
-        description: 'Lorem ipsum',
+        description: 'Parceira',
         scheduledDate: new Date(2024, 6, 21, 6, 30),
-        files: [
-          { type: 'txt', url: '1234' }
-        ],
+        files:[{"name": "RG.pdf"}],
       },
       update: { 
-        files:[{"name": "Nota fiscal.pdf"}, {"name": "Layout técnico.pdf"}, {"name": "RG.pdf"}],
-        description: 'Verificar Carro tesla',
-        scheduledDate: new Date(2024, 4, 21, 6, 30),
       }
     },
 
@@ -457,20 +426,15 @@ async function main() {
       where: { id: visitsId[10] },
       create: {
         id: visitsId[10],
-        visitorId: visitorIds[randomVisitor()],
-        companyId,
+        visitorId: visitorsDefaults.billGates,
+        companyId: companysDefaults.tesla,
         approved: true,
         finished: true,
-        description: 'Lorem ipsum',
+        description: 'Reunião sócios',
         scheduledDate: new Date(2024, 6, 21, 5, 20),
-        files: [
-          { type: 'txt', url: '1234' }
-        ],
+        files:[{"name": "RG.pdf"}],
       },
       update: { 
-        files:[{"name": "Nota fiscal.pdf"}, {"name": "Layout técnico.pdf"}, {"name": "RG.pdf"}],
-        description: 'Verificar Carro tesla',
-        scheduledDate: new Date(2024, 4, 21, 5, 20),
       }
     },
   ]

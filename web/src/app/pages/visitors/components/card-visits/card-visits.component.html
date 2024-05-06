@@ -1,0 +1,34 @@
+<ion-card button>
+  <ion-card-header>
+    <div style="display: flex;">
+      <div style="flex: 1;">
+        <ion-card-subtitle>{{ visitor.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</ion-card-subtitle>
+        <ion-card-title>{{ visitor.company.name }}</ion-card-title>
+      </div>
+      <ion-button style="width: fit-content;" size="small" shape="round" fill="clear" [routerLink]="visitor.id">
+        <ion-icon slot="icon-only" name="pencil"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-card-header>
+
+  <ion-card-content>
+    <p class="address" [title]="getAddresVisitor(visitor.company.address)">{{ getAddresVisitor(visitor.company.address) }}</p>
+    <!-- <p>{{ visitor.description }}</p> -->
+    <ion-accordion-group>
+      <ion-accordion [disabled]="!visitor.files.length">
+        <ion-item slot="header" color="light">
+          <ion-label>({{ visitor.files.length }}) Arquivos</ion-label>
+        </ion-item>
+
+        <div class="ion-padding file-list" slot="content">
+          <ion-item *ngFor="let file of visitor?.files" disabled button>
+            <ion-label>{{ file.name }}</ion-label>
+            <ion-button fill="clear">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
+  </ion-card-content>
+</ion-card>

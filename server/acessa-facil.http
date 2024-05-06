@@ -1,3 +1,8 @@
+# Token Company -> 50years
+# Token Visitor -> 50years
+@token_company = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZDMwMzMxOS0wMmU1LTQzNDktYmY0Yi1hYTc3M2QyNzE4YjciLCJlbWFpbCI6ImluZm9AdGVzbGEuY29tIiwidHlwZSI6ImNvbXBhbnlzIiwiaWF0IjoxNzE0ODUwMTIwLCJleHAiOjMyOTI3MzAxMjB9.4C57Jb0iue7y2VfyxExqISz9JYyqTtNZNnvf_sBl90Y'
+@token_visitors = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzMzkwYzJmYS1jODkzLTQ0MWUtYTk5OC1hMWJiZWM2Nzg4NjIiLCJlbWFpbCI6ImF5cnRvbnNlbm5hQGdtYWlsLmNvbSIsInR5cGUiOiJ2aXNpdG9ycyIsImlhdCI6MTcxNDg1MDM0NywiZXhwIjozMjkyNzMwMzQ3fQ.dO6AsTTrllP67pPY2BdbRMLL-b3shsWwsf_byP2RMVc'
+
 ##############
 # Companys   #
 ##############
@@ -17,6 +22,11 @@ Content-Type: application/json
         "zipCode": "12345000"
     }
 }
+
+##############
+GET http://localhost:3000/companys
+Content-Type: application/json
+
 
 ##############
 # Visitors   #
@@ -52,6 +62,10 @@ Content-Type: application/json
 
 ##############
 GET http://localhost:3000/visits/companys/dd303319-02e5-4349-bf4b-aa773d2718b7
+Content-Type: application/json
+##############
+GET http://localhost:3000/visits/visitors
+Authorization: Bearer {{token_visitors}}
 Content-Type: application/json
 
 ##############
@@ -97,6 +111,6 @@ POST http://localhost:3000/auth/visitors
 Content-Type: application/json
 
 {
-    "password": "teste",
-    "email": "teste32@gmail.com"
+    "password": "123456",
+    "email": "ayrtonsenna@gmail.com"
 }

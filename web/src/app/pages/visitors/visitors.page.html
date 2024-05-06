@@ -2,59 +2,110 @@
   <ion-toolbar color="primary">
     <ion-item color="primary">
       <ion-thumbnail>
-        <img [src]="visitor?.avatar ? visitor.avatar : 'https://us.123rf.com/450wm/anatolir/anatolir2011/anatolir201105528/159470802-jurist-avatar-icon-flat-style.jpg?ver\u003d6' " />
+        <img [src]="visitor.avatar ? visitor.avatar : 'https://us.123rf.com/450wm/anatolir/anatolir2011/anatolir201105528/159470802-jurist-avatar-icon-flat-style.jpg?ver\u003d6' " />
       </ion-thumbnail>
-      <ion-label class="ion-padding-start">{{ visitor?.name ? visitor.name : 'Visitante não encontrada' }}</ion-label>
+      <ion-label class="ion-padding-start">{{ visitor.name ? visitor.name : 'Visitante não encontrada' }}</ion-label>
     </ion-item>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <main>
-    <ion-list>
+    <ng-container *ngIf="!form">
+      <ion-segment [value]="type" (ionChange)="segmentChanged($event)" class="ion-margin-top">
+        <ion-segment-button value="wait" [disabled]="!visitorsWaiting.length" [style.pointer-events]="!visitorsWaiting.length ? 'none' : 'initial'">
+          <ion-label>{{ visitorsWaiting.length }} Aguardando</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="approve" [disabled]="!visitorsApproved.length" [style.pointer-events]="!visitorsApproved.length ? 'none' : 'initial'">
+          <ion-label>{{ visitorsApproved.length }} Autorizados</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="reject" [disabled]="!visitorsReject.length" [style.pointer-events]="!visitorsReject.length ? 'none' : 'initial'">
+          <ion-label>{{ visitorsReject.length }} Recusados</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="finish" [disabled]="!visitorsFinish.length" [style.pointer-events]="!visitorsFinish.length ? 'none' : 'initial'">
+          <ion-label>{{ visitorsFinish.length }} Finalizados</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+
       <ion-grid>
         <ion-row>
-          <ion-col size="4" *ngFor="let i of [0,0,0,0]">
-            <ion-card button>
-              <ion-card-header>
-                <ion-card-subtitle>Awesome Subtitle</ion-card-subtitle>
-                <ion-card-title>Awesome Title</ion-card-title>
-              </ion-card-header>
-
-              <ion-card-content>
-                <ion-list>
-                  <ion-accordion-group>
-                    <ion-accordion value="first">
-                      <ion-item slot="header" color="light">
-                        <ion-label>Arquivos</ion-label>
-                      </ion-item>
-
-                      <div class="ion-padding" slot="content">
-                        <ion-item>
-                          <ion-label>Layout técnico.pdf</ion-label>
-                          <ion-button fill="clear">
-                            <ion-icon slot="icon-only" name="trash"></ion-icon>
-                          </ion-button>
-                        </ion-item>
-
-                        <ion-item>
-                          <ion-label>RG.pdf</ion-label>
-                          <ion-button fill="clear">
-                            <ion-icon slot="icon-only" name="trash"></ion-icon>
-                          </ion-button>
-                        </ion-item>
-                      </div>
-
-
-                    </ion-accordion>
-                  </ion-accordion-group>
-
-                </ion-list>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
+          <ng-container *ngIf="type == 'wait'">
+            <ion-col size-lg="4" size-md="6" size-xs="12" *ngFor="let visitor of visitorsWaiting">
+              <app-card-visits [visitor]="visitor"></app-card-visits>
+            </ion-col>
+          </ng-container>
+          <ng-container *ngIf="type == 'approve'">
+            <ion-col size-lg="4" size-md="6" size-xs="12" *ngFor="let visitor of visitorsApproved">
+              <app-card-visits [visitor]="visitor"></app-card-visits>
+            </ion-col>
+          </ng-container>
+          <ng-container *ngIf="type == 'reject'">
+            <ion-col size-lg="4" size-md="6" size-xs="12" *ngFor="let visitor of visitorsReject">
+              <app-card-visits [visitor]="visitor"></app-card-visits>
+            </ion-col>
+          </ng-container>
+          <ng-container *ngIf="type == 'finish'">
+            <ion-col size-lg="4" size-md="6" size-xs="12" *ngFor="let visitor of visitorsFinish">
+              <app-card-visits [visitor]="visitor"></app-card-visits>
+            </ion-col>
+          </ng-container>
         </ion-row>
       </ion-grid>
-    </ion-list>
+    </ng-container>
+
+    <ng-container *ngIf="form">
+      <form [formGroup]="visitForm" (ngSubmit)="submit()">
+        <ion-grid>
+          <ion-text color="primary">
+            <h2>Visita</h2>
+          </ion-text>
+          <ion-row>
+            <ion-col size="12">
+            </ion-col>
+            <ion-col size="5">
+              <ion-select [disabled]="visit?.id != null" formControlName="companyId" fill="outline" placeholder="Selecione" label="Empresa *" labelPlacement="floating">
+                <ion-select-option *ngFor="let company of companys" [value]="company?.id">{{ company?.name }}</ion-select-option>
+              </ion-select>
+            </ion-col>
+            <ion-col size="7">
+              <ion-input formControlName="scheduledDate" type="datetime-local" fill="outline" placeholder="Horário" label="Horário de agendamento" [disabled]="visit?.id != null && visit?.approved != null" labelPlacement="floating"></ion-input>
+            </ion-col>
+            <ion-col size="12">
+              <ion-textarea formControlName="description" type="text" fill="outline" rows="5" placeholder="Descrição de serviço" label="Descrição do serviço *" labelPlacement="floating"></ion-textarea>
+            </ion-col>
+
+            <ion-col size="6">
+              <!-- <ion-input type="file" multiple id="fileInput" fill="outline" placeholder="Descrição de serviço" label="Arquivos *" [disabled]="visit?.id != null" labelPlacement="floating" #files></ion-input> -->
+              <ion-item [disabled]="visit?.id != null" lines="none" class="ion-no-padding">
+                <ion-label>Arquivos</ion-label>
+                <input type="file" multiple label="Arquivos *" #files />
+              </ion-item>
+            </ion-col>
+            <ion-col size="6">
+              <ion-item *ngFor="let file of visit?.files;let i = index" [style]=" i % 2 == 0 ? '--background: #e5e5e5;': '' ">
+                <ion-label style="overflow: hidden;white-space: nowrap;" [title]="file.name">{{ file.name }}</ion-label>
+                <ion-button (click)="deleteFile()" fill="clear">
+                  <ion-icon name="trash"></ion-icon>
+                </ion-button>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <ion-button type="submit">
+                Salvar
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </form>
+    </ng-container>
+
   </main>
+  <ion-fab *ngIf="!form" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button routerLink="new">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
+

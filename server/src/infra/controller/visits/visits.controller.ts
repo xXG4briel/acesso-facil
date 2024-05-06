@@ -15,14 +15,27 @@ export class VisitsController {
     ) {}
 
   @Get('/companys')
-  async index(@Request() req: any) {
+  async findAllCompanys(@Request() req: any) {
     try {
 
       const { sub, type } = req.decoded;
       
       this.logger.debug(`companyId: ${sub}`);
 
-      return await this.visitsService.findAll(sub);
+      return await this.visitsService.findAllCompanys(sub);
+    } catch (err) {
+      throw new InternalServerErrorException('Error retrieving visits', err);
+    }
+  }
+  @Get('/visitors')
+  async findAllVisitors(@Request() req: any) {
+    try {
+
+      const { sub, type } = req.decoded;
+      
+      this.logger.debug(`visitorId: ${sub}`);
+
+      return await this.visitsService.findAllVisitors(sub);
     } catch (err) {
       throw new InternalServerErrorException('Error retrieving visits', err);
     }
@@ -41,33 +54,63 @@ export class VisitsController {
   
   @Post()
   @UseInterceptors(AnyFilesInterceptor())
-  async store(@Body() data: CreateVisitDTO,
-    @UploadedFiles() files: Array<Express.Multer.File>) {
+  async store(
+    @Body() data: CreateVisitDTO,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @Request() req: any
+    ) {
+    let filesArr = []
     if(!isEmpty(files)) {
       this.logger.debug(`files len ${files.length || 0}`)
       this.logger.debug(`${files.map(f => `\nmimetype ${f.mimetype}, name ${f.originalname}`)}`)
+      filesArr = files.map((file) => ({ name: file.originalname }))
       // const urls = this.uploadService.upload
     }
-    // return await this.visitsService.create({});
-  }
-  
+
+    const { sub, type } = req.decoded
+
+    data.visitorId = sub
+    data.scheduledDate = new Date(data.scheduledDate);
+    data.files = filesArr;
+
+    return await this.visitsService.create(data);
+  } 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() data: UpdateVisitDTO) {
+  async update(@Param('id') id: string, @Body() data: UpdateVisitDTO, @Request() req: any) {
     const found = await this.visitsService.find(id);
-    if(!found) {
-      throw new BadRequestException('Visitante não encontrado');
+
+    const { sub, type } = req.decoded;
+
+    if(/companys/.test(type)) {
+      if(!found) {
+        throw new BadRequestException('Visitante não encontrado');
+      }
+      else if(found.companyId != sub) {
+        throw new BadRequestException('Empresa não autorizada');
+      }
+      else if(found.finished) {
+        throw new BadRequestException('Não é possível mudar uma visita já finalizada')
+      }
+      else if(!isEmpty(get(data, 'approved')) && found.approved && !get(data, 'approved')) {
+        throw new BadRequestException('Não é possível rejeitar um visitante já aprovado')
+      }
+      else if(found.approved == get(data, 'approved')) {
+        throw new BadRequestException(`Visitante já ${found.approved ? 'aprovado' : 'rejeitado'}`)
+      }
+      else if(found.finished == get(data, 'finished')) {
+        throw new BadRequestException(`Visitante já finalizado`)
+      }
     }
-    else if(found.finished) {
-      throw new BadRequestException('Não é possível mudar uma visita já finalizada')
-    }
-    else if(!isEmpty(get(data, 'approved')) && found.approved && !get(data, 'approved')) {
-      throw new BadRequestException('Não é possível rejeitar um visitante já aprovado')
-    }
-    else if(found.approved == get(data, 'approved')) {
-      throw new BadRequestException(`Visitante já ${found.approved ? 'aprovado' : 'rejeitado'}`)
-    }
-    else if(found.finished == get(data, 'finished')) {
-      throw new BadRequestException(`Visitante já finalizado`)
+    else if(/visitors/.test(type)) {
+      if(!found) {
+        throw new BadRequestException('Visitante não encontrado');
+      }
+      else if(found.visitorId != sub) {
+        throw new BadRequestException('Visitante não autorizado');
+      }
+      if(data.scheduledDate) {
+        data.scheduledDate = new Date(data.scheduledDate);
+      }
     }
 
     this.logger.debug(`id: ${id}, data: ${JSON.stringify(data)}`);

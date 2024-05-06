@@ -1,4 +1,4 @@
-import { Injectable, Logger, NestMiddleware, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, Injectable, Logger, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response, NextFunction } from 'express';
 
@@ -11,19 +11,21 @@ export class AuthMiddleware implements NestMiddleware {
 
   async use(req: Request, res: Response, next: NextFunction) {
     
-    const token = req.headers.authorization?.replace('Bearer ', '');
+    const token = req.headers.authorization?.replace('Bearer ', '').replace(/\'/g,'');
 
+    
     try {
-        if( /^(?!\/login|register).*/.test(req.baseUrl) ) {
-            this.logger.debug('token ' + token);
+      if( /^(?!\/auth\/(visitors|companys)).*/.test(req.baseUrl) ) {
+          if(!token) throw new ForbiddenException('Informe o Authorization nos cabeçalhos.');
+          this.logger.debug('token ' + token);
 
-            this.jwtService.verify(token);
-            // TODO -> VALIDAR ACESSO DO TYPE POR ROTA 
-            const decoded = this.jwtService.decode(token);
+          this.jwtService.verify(token);
+          // TODO -> VALIDAR ACESSO DO TYPE POR ROTA 
+          const decoded = this.jwtService.decode(token);
 
-            this.logger.debug(decoded);
+          this.logger.debug(decoded);
 
-            req['decoded'] = decoded;
+          req['decoded'] = decoded;
         }
     }
     catch (err) {

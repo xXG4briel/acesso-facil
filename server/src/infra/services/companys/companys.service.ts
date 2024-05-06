@@ -33,4 +33,8 @@ export class CompanysService {
       console.error(err);
     }
   }
+
+  async findAll() {
+    return await this.clientService.company.findMany();
+  }
 }

@@ -18,4 +18,8 @@ export class CompanysService {
     const url = `${BASE_URL}/companys/visitors`;
     return this.httpService.get<T>(url);
   }
+  findAll<T>(): Observable<T[]> {
+    const url = `${BASE_URL}/companys`;
+    return this.httpService.get<T[]>(url);
+  }
 }
