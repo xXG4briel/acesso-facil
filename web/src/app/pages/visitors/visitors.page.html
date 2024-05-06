@@ -63,20 +63,20 @@
             <ion-col size="12">
             </ion-col>
             <ion-col size="5">
-              <ion-select [disabled]="visit?.id != null" formControlName="companyId" fill="outline" placeholder="Selecione" label="Empresa *" labelPlacement="floating">
-                <ion-select-option *ngFor="let company of companys" [value]="company?.id">{{ company?.name }}</ion-select-option>
+              <ion-select [disabled]="visit.id != null" formControlName="companyId" fill="outline" placeholder="Selecione" label="Empresa *" labelPlacement="floating">
+                <ion-select-option *ngFor="let company of companys" [value]="company.id">{{ company?.name }}</ion-select-option>
               </ion-select>
             </ion-col>
             <ion-col size="7">
-              <ion-input formControlName="scheduledDate" type="datetime-local" fill="outline" placeholder="Horário" label="Horário de agendamento" [disabled]="visit?.id != null && visit?.approved != null" labelPlacement="floating"></ion-input>
+              <ion-input formControlName="scheduledDate" type="datetime-local" fill="outline" placeholder="Horário" label="Horário de agendamento" [disabled]="visit.id != null && visit.approved != null" labelPlacement="floating"></ion-input>
             </ion-col>
             <ion-col size="12">
               <ion-textarea formControlName="description" type="text" fill="outline" rows="5" placeholder="Descrição de serviço" label="Descrição do serviço *" labelPlacement="floating"></ion-textarea>
             </ion-col>
 
             <ion-col size="6">
-              <!-- <ion-input type="file" multiple id="fileInput" fill="outline" placeholder="Descrição de serviço" label="Arquivos *" [disabled]="visit?.id != null" labelPlacement="floating" #files></ion-input> -->
-              <ion-item [disabled]="visit?.id != null" lines="none" class="ion-no-padding">
+              <!-- <ion-input type="file" multiple id="fileInput" fill="outline" placeholder="Descrição de serviço" label="Arquivos *" [disabled]="visit.id != null" labelPlacement="floating" #files></ion-input> -->
+              <ion-item [disabled]="visit.id != null" lines="none" class="ion-no-padding">
                 <ion-label>Arquivos</ion-label>
                 <input type="file" multiple label="Arquivos *" #files />
               </ion-item>
