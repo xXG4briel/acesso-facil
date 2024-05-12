@@ -24,10 +24,6 @@ export class ModalExampleComponent {
   }
 
   cancel() {
-    // return this.modalCtrl.dismiss(null, 'cancel');
-  }
-
-  confirm() {
-    // return this.modalCtrl.dismiss(this.name, 'confirm');
+    return this.modalCtrl.dismiss();
   }
 }

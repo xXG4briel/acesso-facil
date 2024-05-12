@@ -13,7 +13,7 @@
 
   <main>
 
-    <ion-segment value="wait" (ionChange)="segmentChanged($event)" class="ion-margin-top">
+    <ion-segment [scrollable]="true" value="wait" (ionChange)="segmentChanged($event)" class="ion-margin-top">
       <ion-segment-button value="wait" [disabled]="!visitorsWaiting?.length" [style.pointer-events]="!visitorsWaiting?.length ? 'none' : 'initial'">
         <ion-label>{{ visitorsWaiting?.length ?? 0 }} Aguardando</ion-label>
       </ion-segment-button>
@@ -36,11 +36,19 @@
           </ion-thumbnail>
 
           <ion-label class="ion-padding-start">
-            <h1>{{ visit.visitor.fullName }} - {{ visit.visitor.role }} </h1>
-            <p>{{ visit.visitor.phone }}</p>
+            <ng-container *ngIf="!isMobile">
+              <h1>{{ visit.visitor.fullName }} - {{ visit.visitor.role }} </h1>
+              <p>{{ visit.visitor.phone }}</p>
+            </ng-container>
+            <ng-container *ngIf="isMobile">
+              <h1>{{ visit.visitor.fullName }}</h1>
+              <p>{{ visit.visitor.role }}</p>
+              <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
+              <p>{{ visit.visitor.phone }}</p>
+            </ng-container>
           </ion-label>
 
-          <ion-label>
+          <ion-label *ngIf="!isMobile">
             <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
           </ion-label>
 
@@ -63,11 +71,19 @@
           </ion-thumbnail>
 
           <ion-label class="ion-padding-start">
-            <h1>{{ visit.visitor.fullName }} - {{ visit.visitor.role }} </h1>
-            <p>{{ visit.visitor.phone }}</p>
+            <ng-container *ngIf="!isMobile">
+              <h1>{{ visit.visitor.fullName }} - {{ visit.visitor.role }} </h1>
+              <p>{{ visit.visitor.phone }}</p>
+            </ng-container>
+            <ng-container *ngIf="isMobile">
+              <h1>{{ visit.visitor.fullName }}</h1>
+              <p>{{ visit.visitor.role }}</p>
+              <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
+              <p>{{ visit.visitor.phone }}</p>
+            </ng-container>
           </ion-label>
 
-          <ion-label>
+          <ion-label *ngIf="!isMobile">
             <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
           </ion-label>
 
@@ -85,11 +101,19 @@
           </ion-thumbnail>
 
           <ion-label class="ion-padding-start">
-            <h1>{{ visit.visitor.fullName }} - {{ visit.visitor.role }} </h1>
-            <p>{{ visit.visitor.phone }}</p>
+            <ng-container *ngIf="!isMobile">
+              <h1>{{ visit.visitor.fullName }} - {{ visit.visitor.role }} </h1>
+              <p>{{ visit.visitor.phone }}</p>
+            </ng-container>
+            <ng-container *ngIf="isMobile">
+              <h1>{{ visit.visitor.fullName }}</h1>
+              <p>{{ visit.visitor.role }}</p>
+              <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
+              <p>{{ visit.visitor.phone }}</p>
+            </ng-container>
           </ion-label>
 
-          <ion-label>
+          <ion-label *ngIf="!isMobile">
             <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
           </ion-label>
 
@@ -107,11 +131,19 @@
           </ion-thumbnail>
 
           <ion-label class="ion-padding-start">
-            <h1>{{ visit.visitor.fullName }} - {{ visit.visitor.role }} </h1>
-            <p>{{ visit.visitor.phone }}</p>
+            <ng-container *ngIf="!isMobile">
+              <h1>{{ visit.visitor.fullName }} - {{ visit.visitor.role }} </h1>
+              <p>{{ visit.visitor.phone }}</p>
+            </ng-container>
+            <ng-container *ngIf="isMobile">
+              <h1>{{ visit.visitor.fullName }}</h1>
+              <p>{{ visit.visitor.role }}</p>
+              <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
+              <p>{{ visit.visitor.phone }}</p>
+            </ng-container>
           </ion-label>
 
-          <ion-label>
+          <ion-label *ngIf="!isMobile">
             <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
           </ion-label>
 

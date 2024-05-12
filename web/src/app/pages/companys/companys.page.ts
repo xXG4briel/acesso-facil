@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, Platform } from '@ionic/angular';
 import { AlertService } from 'src/app/services/alert.service';
 import { CompanysService } from 'src/app/services/companys.service';
 import { VisitsService } from 'src/app/services/visits.service';
@@ -20,15 +20,19 @@ export class CompanysPage implements OnInit {
   visitorsFinish: any = []
 
   company: { name: string, avatar: string };
+  isMobile: boolean = false;
 
   constructor(
     private readonly companyService: CompanysService,
     private readonly modalCtrl: ModalController,
     private readonly visitsService: VisitsService,
-    private readonly alertService: AlertService
+    private readonly alertService: AlertService,
+    private readonly platformService: Platform
   ) { }
 
   async ngOnInit() {
+    this.isMobile = this.platformService.is('mobile') || this.platformService.is('mobileweb');
+
     this.getCompany();
 
     await this.getVisits();
