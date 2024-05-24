@@ -14,6 +14,15 @@ video {
   height: 100vh;
   ion-row {
     height: 100%;
+    .left {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(130deg, #0095cc, #011e39);
+      ion-img {
+        max-width: 256px;
+      }
+    }
       ion-col {
           .login-form-container {
             max-width: 400px;
@@ -32,3 +41,14 @@ video {
       }
   }
 }
+
+@media screen and (max-width: 992px) {
+  .login-form-container {
+    ion-img {
+      margin: 0 auto;
+      display: block !important;
+      max-width: 50%;
+    }
+  }
+}
+

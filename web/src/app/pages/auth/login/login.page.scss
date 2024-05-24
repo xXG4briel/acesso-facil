@@ -1,11 +1,24 @@
+// .logo {
+//   margin: 0 auto;
+//   max-width: 128px;
+// }
+
 ion-grid {
     ion-row {
         height: 100vh;
         ion-col {
             &:nth-child(1) {
-                background: var(--ion-color-primary);
+                background: linear-gradient(130deg, #0095cc, #011e39);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                ion-img {
+                  max-width: 256px;
+                }
             }
             .login-form-container {
+              // padding-bottom: 40px;
+              // position: relative;
               max-width: 400px;
               margin: 0 auto;
               height: 100%;
@@ -21,4 +34,14 @@ ion-grid {
             }
         }
     }
+}
+
+@media screen and (max-width: 992px) {
+  .login-form-container {
+    ion-img {
+      margin: 0 auto;
+      display: block !important;
+      max-width: 50%;
+    }
+  }
 }

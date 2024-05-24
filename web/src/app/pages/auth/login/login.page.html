@@ -2,10 +2,13 @@
 
   <ion-grid class="ion-no-padding">
     <ion-row>
-      <ion-col size-lg="5" size-md="0" size-xs="0"></ion-col>
+      <ion-col size-lg="5" size-md="0" size-xs="0">
+        <ion-img src="assets/logo.png"></ion-img>
+      </ion-col>
       <ion-col size-lg="7" size-md="12" size-xs="12"  class="ion-padding">
         <div class="login-form-container">
-          <!-- <ion-title>Entrar</ion-title> -->
+          <ion-img class="ion-hide" src="assets/logo.png"></ion-img>
+
           <ion-segment [value]="type" (ionChange)="segmentChanged($event)">
             <ion-segment-button value="companys">
               <ion-label>Empresa</ion-label>
