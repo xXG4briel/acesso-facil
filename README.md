@@ -1,5 +1,8 @@
 # Acesso Fácil - Sistema de Controle de Acesso via QR Code
 
+   <image src="https://github.com/user-attachments/assets/6174b5c1-a8f5-4c4c-b655-fb4bc9706126" width="248px" />
+
+
 ## Visão Geral
 
 O projeto "Acesso Fácil" apresenta um sistema inovador de controle de acesso, simplificando a entrada de visitantes em ambientes empresariais através da utilização de QR codes. A solução abrange desde a gestão de convites pela empresa até o acompanhamento do status da visita pelo convidado.
@@ -42,6 +45,9 @@ Este projeto foi desenvolvido utilizando as seguintes tecnologias:
     * Mecanismos de autenticação e autorização para proteger as informações e funcionalidades do sistema.
     * [Outros aspectos de segurança implementados].
 
+![image](https://github.com/user-attachments/assets/9545c355-b061-47b4-b0f2-6dd1a3e1e208)
+
+
 ## Participantes
 
 Este projeto foi desenvolvido pelos seguintes alunos:
@@ -55,6 +61,3 @@ Este projeto foi desenvolvido pelos seguintes alunos:
 
 **Orientador:** Me. Prof. Ranieri Marinho de Souza
 
-## Estrutura do Projeto
-
-A estrutura do projeto está organizada da seguinte forma:
