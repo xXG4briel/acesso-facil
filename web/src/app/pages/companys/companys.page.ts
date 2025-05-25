@@ -4,6 +4,7 @@ import { AlertService } from 'src/app/services/alert.service';
 import { CompanysService } from 'src/app/services/companys.service';
 import { VisitsService } from 'src/app/services/visits.service';
 import { ModalExampleComponent } from './modal-visit-info';
+import { ModalCreateVisitComponent } from './modal-create-visit';
 
 @Component({
   selector: 'app-companys',
@@ -87,20 +88,58 @@ export class CompanysPage implements OnInit {
     })
   }
 
-  async showVisit(visit?: any){
+  createVisitSubmit(value: unknown){
+    this.companyService.createVisit(value).subscribe({
+      next: async (value) => {
+        this.alertService.alert({ header: 'Sucesso', message: 'Visita criada com sucesso' });
+        this.modalCtrl.dismiss();
+      },
+      error: (err) => {
+        this.alertService.alert({ header: 'Erro', message: `Não foi possível criar a visita. ${err.error.message}` });
+      },
+      complete: async() => {
+        await this.getVisits(); // to do validar se funfa
+      }
+    });
+  }
 
+  async createVisit() {
     const modal = await this.modalCtrl.create({
-      component: ModalExampleComponent,
+      component: ModalCreateVisitComponent,
       componentProps: {
-        visit
+        createVisitSubmit: this.createVisitSubmit
       }
     })
 
     modal.present();
+  }
 
-    // console.log(visit)
-    // return modal.then((v) => v.)
-   }
+  async showVisit(visit?: any){
+    const modal = await this.modalCtrl.create({
+      component: ModalExampleComponent,
+      componentProps: {
+        visit,
+        updateVisitSubmit: this.updateVisitSubmit
+      }
+    })
+
+    modal.present();
+  }
+
+  updateVisitSubmit(id: string, value: unknown){
+    this.companyService.updateVisit(id, value).subscribe({
+      next: async (value) => {
+        this.alertService.alert({ header: 'Sucesso', message: 'Visita atualizada com sucesso' });
+        this.modalCtrl.dismiss();
+      },
+      error: (err) => {
+        this.alertService.alert({ header: 'Erro', message: `Não foi possível atualizar a visita. ${err.error.message}` });
+      },
+      complete: async() => {
+        await this.getVisits(); // to do validar se funfa
+      }
+    });
+  }
 
   async segmentChanged(e: any){
     this.type = e.target.value;

@@ -8,53 +8,90 @@ datasource db {
 }
 
 model Company {
-  id           String   @id @default(uuid())
-  name         String   @db.VarChar(200)
-  email        String   @unique @db.VarChar(200)
-  identity     String   @db.VarChar(14)
-  identityType Identity @default(cnpj)
+  id           String     @id @default(uuid())
+  name         String     @db.VarChar(200)
+  email        String     @unique @db.VarChar(200)
+  identity     String     @db.VarChar(14)
+  identityType Identity   @default(cnpj)
   url          String?
   address      Json
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
   password     String
   Visit        Visit[]
+  Document     Document[]
 
   @@map("companys")
 }
 
 model Visitor {
-  id           String   @id @default(uuid())
-  password     String
-  fullName     String   @db.VarChar(200)
-  email        String   @unique @db.VarChar(200)
-  birthday     DateTime @db.Date
-  identity     String   @db.VarChar(14)
-  identityType Identity @default(cnpj)
-  url          String
-  role         String
-  phone        String
-  address      Json
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  Visit        Visit[]
+  id            String          @id @default(uuid())
+  password      String
+  fullName      String          @db.VarChar(200)
+  email         String          @unique @db.VarChar(200)
+  birthday      DateTime        @db.Date
+  identity      String          @db.VarChar(14)
+  identityType  Identity        @default(cnpj)
+  url           String
+  role          String
+  phone         String
+  address       Json
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  Visit         Visit[]
+  Document      Document[]
+  DocumentVisit DocumentVisit[]
 
   @@map("visitors")
 }
 
+model Document {
+  id            String          @id @default(uuid())
+  name          String          @db.VarChar(200)
+  description   String
+  url           String
+  visitor       Visitor?        @relation(fields: [visitorId], references: [id])
+  visitorId     String?
+  company       Company?        @relation(fields: [companyId], references: [id])
+  companyId     String?
+  default       Boolean         @default(true)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  DocumentVisit DocumentVisit[]
+
+  @@map("documents")
+}
+
+model DocumentVisit {
+  id         String   @id @default(uuid())
+  visitor    Visitor  @relation(fields: [visitorId], references: [id])
+  visitorId  String
+  visitId    String
+  visit      Visit    @relation(fields: [visitId], references: [id])
+  document   Document @relation(fields: [documentId], references: [id])
+  documentId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("document_visits")
+}
+
 model Visit {
-  id            String   @id @default(uuid())
-  scheduledDate DateTime
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id            String          @id @default(uuid())
+  scheduledDate DateTime?
+  startDate     DateTime        @default(now())
+  endDate       DateTime        @default(now())
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
   files         Json
   description   String
-  company       Company  @relation(fields: [companyId], references: [id])
+  company       Company         @relation(fields: [companyId], references: [id])
   companyId     String
-  visitor       Visitor  @relation(fields: [visitorId], references: [id])
+  visitor       Visitor         @relation(fields: [visitorId], references: [id])
   visitorId     String
+  documentVisit DocumentVisit[]
   approved      Boolean?
-  finished      Boolean  @default(false)
+  finished      Boolean         @default(false)
 
   @@map("visits")
 }

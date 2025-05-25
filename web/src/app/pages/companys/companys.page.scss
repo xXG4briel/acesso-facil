@@ -8,3 +8,23 @@ main {
     padding: 0 16px;
   }
 }
+
+ion-segment {
+  ion-segment-button:nth-child(1) {
+    color: var(--ion-color-warning);
+    --color-checked: var(--ion-color-warning);
+  }
+  ion-segment-button:nth-child(2) {
+    color: var(--ion-color-success);
+    --color-checked: var(--ion-color-success);
+  }
+  ion-segment-button:nth-child(3) {
+    color: var(--ion-color-danger);
+    --color-checked: var(--ion-color-danger);
+  }
+  ion-segment-button:nth-child(4) {
+    color: var(--ion-color-primary);
+    --color-checked: var(--ion-color-primary);
+  }
+  
+}

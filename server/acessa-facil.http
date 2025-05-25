@@ -27,6 +27,17 @@ Content-Type: application/json
 GET http://localhost:3000/companys
 Content-Type: application/json
 
+##############
+POST http://localhost:5427/companys/visit
+Content-Type: application/json
+Authorization: Bearer {{token_company}}
+
+{
+    "email": "ayrtonsenna@gmail.com",
+    "description": "alguma descrição",
+    "startDate": "2025-05-23T02:00:00.000Z",
+    "endDate": "2025-05-30T02:31"
+}
 
 ##############
 # Visitors   #
@@ -61,8 +72,9 @@ Content-Type: application/json
 }
 
 ##############
-GET http://localhost:3000/visits/companys/dd303319-02e5-4349-bf4b-aa773d2718b7
+GET http://localhost:5427/visits/companys
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZDMwMzMxOS0wMmU1LTQzNDktYmY0Yi1hYTc3M2QyNzE4YjciLCJlbWFpbCI6ImluZm9AdGVzbGEuY29tIiwidHlwZSI6ImNvbXBhbnlzIiwiaWF0IjoxNzQ3ODgyMjY0LCJleHAiOjE3NDc5Njg2NjR9.h14FJRleNSunQO8R8odolzTlu6rSgCjjt8a7FRkD_bo
 ##############
 GET http://localhost:3000/visits/visitors
 Authorization: Bearer {{token_visitors}}

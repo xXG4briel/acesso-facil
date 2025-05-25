@@ -5,8 +5,9 @@ import { VisitorsService } from './visitors/customers.service';
 import { UploadService } from './upload/upload.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { VisitsService } from './visits/visits.service';
+import { LibModule } from '../common';
 @Module({
-  imports: [ConfigModule],
+  imports: [ConfigModule, LibModule],
   providers: [
     CompanysService,
     VisitorsService,

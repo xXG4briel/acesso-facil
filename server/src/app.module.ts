@@ -7,8 +7,8 @@ import { VisitorsController } from './infra/controller/visitors/controller';
 import { AuthController } from './infra/controller/auth/controller';
 import { JwtModule } from '@nestjs/jwt';
 import { VisitsController } from './infra/controller/visits/visits.controller';
-import { VisitsService } from './infra/services/visits/visits.service';
 import { AuthMiddleware } from './middleware';
+import { LibModule } from './infra/common';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { AuthMiddleware } from './middleware';
       global: true,
       secret: '%/*G3cPX01-k`hzB%-OA9:}vgo)9Jtzq',
       signOptions: { expiresIn: '1day' },
-    }),
+    })    
   ],
   controllers: [
     AppController,
@@ -26,7 +26,7 @@ import { AuthMiddleware } from './middleware';
     AuthController,
     VisitsController,
   ],
-  providers: [AppService, VisitsService],
+  providers: [AppService],
   exports: [],
 })
 export class AppModule implements NestModule {

@@ -3,7 +3,7 @@
     <div style="display: flex;">
       <div style="flex: 1;">
         <ion-card-subtitle>{{ visitor.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</ion-card-subtitle>
-        <ion-card-title>{{ visitor.company.name }}</ion-card-title>
+        <h2 style="color: var(--ion-color-dark);">{{ visitor.company.name }}</h2>
       </div>
       <ion-button style="width: fit-content;" size="small" shape="round" fill="clear" [routerLink]="visitor.id">
         <ion-icon slot="icon-only" name="pencil"></ion-icon>

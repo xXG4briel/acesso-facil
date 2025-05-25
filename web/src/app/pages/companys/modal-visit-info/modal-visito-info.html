@@ -1,38 +1,46 @@
 <main>
-
-  <ion-grid>
-    <ion-row>
-      <ion-col size="4">
-        <img style="object-fit: cover; object-position: center;" [src]="visit.visitor.url" />
-      </ion-col>
-      <ion-col size="8">
-        <ion-card style="height: calc(100% - 16px);">
-          <ion-card-header>
-            <ion-card-subtitle>{{ visit.visitor.fullName }} - {{ visit.visitor.role }}</ion-card-subtitle>
-            <ion-card-title>{{ visit.visitor.phone }}</ion-card-title>
-          </ion-card-header>
-
-          <ion-card-content>
-            {{ visit.description }}
-          </ion-card-content>
-
-          <!-- <p>{{ visit | json }}</p> -->
-        </ion-card>
-      </ion-col>
-    </ion-row>
-
-  </ion-grid>
-
-
+  <form [formGroup]="form">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4">
+          <img style="object-fit: cover; object-position: center;" [src]="visit.visitor.url" />
+        </ion-col>
+        <ion-col size="8">
+          <ion-card style="height: calc(100% - 16px);">
+            <ion-card-header>
+              <ion-card-subtitle>{{ visit.visitor.fullName }} - {{ visit.visitor.role }}</ion-card-subtitle>
+              <ion-card-title>{{ visit.visitor.phone }}</ion-card-title>
+            </ion-card-header>
+  
+            <ion-card-content>
+              {{ visit.description }}
+            </ion-card-content>
+  
+            <!-- <p>{{ visit | json }}</p> -->
+          </ion-card>
+        </ion-col>
+      </ion-row>
+  
+      <ion-row>
+        <ion-col size="6">
+          <ion-input type="datetime-local" formControlName="startDate" fill="outline" labelPlacement="floating" label="Horário de entrada" [disabled]="!(visit?.approved == null && !visit?.finished)" style="width: fit-content;" class="ion-no-padding ion-margin" ></ion-input>
+        </ion-col>
+    
+        <ion-col size="6">
+          <ion-input type="datetime-local" formControlName="endDate" fill="outline" labelPlacement="floating" label="Horário de Saída" [disabled]="!(visit?.approved == null && !visit?.finished)" style="width: fit-content;" class="ion-no-padding ion-margin" ></ion-input>
+        </ion-col>
+      </ion-row>
+    </ion-grid>    
+  </form>
 
 
   <ion-list>
     <ion-list-header>
-      <ion-label>{{ (visit.files.length <= 1 ? 'Arquivo' : 'Arquivos') + ' - ' + visit.files.length}}</ion-label>
-    </ion-list-header>
+      <ion-label>{{ (visit.documentVisit.length <= 1 ? 'Arquivo' : 'Arquivos') + ' - ' + visit.documentVisit.length}}</ion-label>
+    </ion-list-header>    
 
-    <ion-item *ngFor="let file of visit.files" button>
-      <ion-label>{{ file.name }}</ion-label>
+    <ion-item *ngFor="let file of visit.documentVisit" button>
+      <ion-label>{{ file.document.name }}</ion-label>
       <ion-button (click)="downloadFile(file)" fill="clear">
         <ion-icon slot="icon-only" name="download-outline"></ion-icon>
       </ion-button>
@@ -43,10 +51,16 @@
 
 <ion-footer>
   <ion-toolbar>
-    <ion-button (click)="cancel()" expand="block" color="danger">
-      <ion-icon slot="start" name="cancel"></ion-icon>
-      Fechar
-    </ion-button>
+    <div style="display: flex;" class="ion-justify-content-center ion-align-items-between">
+      <ion-button (click)="cancel()" color="danger">
+        <ion-icon name="close-outline"></ion-icon>
+        Fechar
+      </ion-button>
+
+      <ion-button color="success" (click)="updateVisitSubmit(visit.id, form.value)" [disabled]="form.invalid || !(visit?.approved == null && !visit?.finished)">
+        <ion-icon name="save-outline"></ion-icon>
+        Salvar
+      </ion-button>
+    </div>
   </ion-toolbar>
 </ion-footer>
-

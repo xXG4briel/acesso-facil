@@ -43,13 +43,13 @@
             <ng-container *ngIf="isMobile">
               <h1>{{ visit.visitor.fullName }}</h1>
               <p>{{ visit.visitor.role }}</p>
-              <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
+              <p>{{ visit.startDate | date : 'dd/MM/yyyy hh:mm' }}</p> <p>{{ visit.endDate | date : 'dd/MM/yyyy hh:mm' }}</p>
               <p>{{ visit.visitor.phone }}</p>
             </ng-container>
           </ion-label>
 
           <ion-label *ngIf="!isMobile">
-            <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
+            <p>{{ visit.startDate | date : 'dd/MM/yyyy hh:mm' }}</p> <p>{{ visit.endDate | date : 'dd/MM/yyyy hh:mm' }}</p>
           </ion-label>
 
           <ion-button (click)="approveVisit(visit.id)" color="success">
@@ -78,13 +78,13 @@
             <ng-container *ngIf="isMobile">
               <h1>{{ visit.visitor.fullName }}</h1>
               <p>{{ visit.visitor.role }}</p>
-              <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
+              <p>{{ visit.startDate | date : 'dd/MM/yyyy hh:mm' }}</p> <p>{{ visit.endDate | date : 'dd/MM/yyyy hh:mm' }}</p>
               <p>{{ visit.visitor.phone }}</p>
             </ng-container>
           </ion-label>
 
           <ion-label *ngIf="!isMobile">
-            <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
+            <p>{{ visit.startDate | date : 'dd/MM/yyyy hh:mm' }}</p> <p>{{ visit.endDate | date : 'dd/MM/yyyy hh:mm' }}</p>
           </ion-label>
 
 
@@ -108,13 +108,13 @@
             <ng-container *ngIf="isMobile">
               <h1>{{ visit.visitor.fullName }}</h1>
               <p>{{ visit.visitor.role }}</p>
-              <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
+              <p>{{ visit.startDate | date : 'dd/MM/yyyy hh:mm' }}</p> <p>{{ visit.endDate | date : 'dd/MM/yyyy hh:mm' }}</p>
               <p>{{ visit.visitor.phone }}</p>
             </ng-container>
           </ion-label>
 
           <ion-label *ngIf="!isMobile">
-            <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
+            <p>{{ visit.startDate | date : 'dd/MM/yyyy hh:mm' }}</p> <p>{{ visit.endDate | date : 'dd/MM/yyyy hh:mm' }}</p>
           </ion-label>
 
 
@@ -138,13 +138,13 @@
             <ng-container *ngIf="isMobile">
               <h1>{{ visit.visitor.fullName }}</h1>
               <p>{{ visit.visitor.role }}</p>
-              <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
+              <p>{{ visit.startDate | date : 'dd/MM/yyyy hh:mm' }}</p> <p>{{ visit.endDate | date : 'dd/MM/yyyy hh:mm' }}</p>
               <p>{{ visit.visitor.phone }}</p>
             </ng-container>
           </ion-label>
 
           <ion-label *ngIf="!isMobile">
-            <p>{{ visit.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</p>
+            <p>{{ visit.startDate | date : 'dd/MM/yyyy hh:mm' }}</p> <p>{{ visit.endDate | date : 'dd/MM/yyyy hh:mm' }}</p>
           </ion-label>
 
 
@@ -156,4 +156,11 @@
       </ng-container>
     </ion-list>
   </main>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="createVisit()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
 </ion-content>

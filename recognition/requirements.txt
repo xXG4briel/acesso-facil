@@ -1,0 +1,7 @@
+flask
+numpy
+opencv-python
+python-dotenv
+sqlalchemy
+psycopg2
+qreader

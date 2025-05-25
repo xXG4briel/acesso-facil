@@ -67,6 +67,10 @@ export class VisitorsPage implements OnInit {
 
   }
 
+  back() {
+    this.route.navigate(['visitors']);
+  }
+
   getVisitor() {
     const storage = localStorage.getItem('me');
     this.visitor = storage ? JSON.parse(storage) : {};

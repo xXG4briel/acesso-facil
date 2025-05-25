@@ -1,6 +1,6 @@
 <ion-header color="primary">
   <ion-toolbar color="primary">
-    <ion-item color="primary">
+    <ion-item color="primary" href="/visitors">
       <ion-thumbnail>
         <img [src]="visitor.avatar ? visitor.avatar : 'https://us.123rf.com/450wm/anatolir/anatolir2011/anatolir201105528/159470802-jurist-avatar-icon-flat-style.jpg?ver\u003d6' " />
       </ion-thumbnail>
@@ -56,26 +56,31 @@
     <ng-container *ngIf="form">
       <form [formGroup]="visitForm" (ngSubmit)="submit()">
         <ion-grid>
-          <ion-text color="primary">
-            <h2>Visita</h2>
-          </ion-text>
+          <ion-item class="ion-no-padding" lines="none">
+            <ion-button (click)="back()" fill="clear">
+              <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+            </ion-button>
+            <ion-text color="primary">
+              <h2>Visita</h2>
+            </ion-text>
+          </ion-item>
           <ion-row>
             <ion-col size="12">
             </ion-col>
             <ion-col size="5">
-              <ion-select [disabled]="visit?.id != null" formControlName="companyId" fill="outline" placeholder="Selecione" label="Empresa *" labelPlacement="floating">
+              <ion-select [disabled]="visit.id != null" formControlName="companyId" fill="outline" placeholder="Selecione" label="Empresa *" labelPlacement="floating">
                 <ion-select-option *ngFor="let company of companys" [value]="company?.id">{{ company?.name }}</ion-select-option>
               </ion-select>
             </ion-col>
             <ion-col size="7">
-              <ion-input formControlName="scheduledDate" type="datetime-local" fill="outline" placeholder="Horário" label="Horário de agendamento" [disabled]="visit?.id != null && visit?.approved != null" labelPlacement="floating"></ion-input>
+              <ion-input [disabled]="visit.id != null" formControlName="scheduledDate" type="datetime-local" fill="outline" placeholder="Horário" label="Horário de agendamento" [disabled]="visit.id != null && visit.approved != null" labelPlacement="floating"></ion-input>
             </ion-col>
             <ion-col size="12">
-              <ion-textarea formControlName="description" type="text" fill="outline" rows="5" placeholder="Descrição de serviço" label="Descrição do serviço *" labelPlacement="floating"></ion-textarea>
+              <ion-textarea [disabled]="visit.id != null" formControlName="description" type="text" fill="outline" rows="5" placeholder="Descrição de serviço" label="Descrição do serviço *" labelPlacement="floating"></ion-textarea>
             </ion-col>
 
             <ion-col size="6">
-              <ion-item [disabled]="visit?.id != null" lines="none" class="ion-no-padding">
+              <ion-item [disabled]="!(visit.approved == null && !visit.finished)" lines="none" class="ion-no-padding">
                 <ion-label>Arquivos</ion-label>
                 <input type="file" multiple label="Arquivos *" #files />
               </ion-item>
@@ -101,10 +106,5 @@
     </ng-container>
 
   </main>
-  <ion-fab *ngIf="!form" vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button routerLink="new">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 </ion-content>
 

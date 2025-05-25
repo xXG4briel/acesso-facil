@@ -9,10 +9,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './http-interceptor';
 import { ModalExampleComponent } from './pages/companys/modal-visit-info';
+import { ModalCreateVisitComponent } from './pages/companys/modal-create-visit';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent, ModalExampleComponent],
-  imports: [BrowserModule, IonicModule.forRoot({}), AppRoutingModule, HttpClientModule],
+  declarations: [AppComponent, ModalExampleComponent, ModalCreateVisitComponent],
+  imports: [BrowserModule, IonicModule.forRoot({}), AppRoutingModule, HttpClientModule, ReactiveFormsModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent],
 })
