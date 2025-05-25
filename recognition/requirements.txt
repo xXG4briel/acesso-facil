@@ -3,5 +3,5 @@ numpy
 opencv-python
 python-dotenv
 sqlalchemy
-psycopg2
+psycopg2-binary
 qreader
