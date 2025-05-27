@@ -7,6 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
     libzbar0 \
     gcc \
+    libgl1 \
     build-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
