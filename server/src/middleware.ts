@@ -29,7 +29,7 @@ export class AuthMiddleware implements NestMiddleware {
         }
     }
     catch (err) {
-        throw new UnauthorizedException('Sessão expirada')
+      throw new UnauthorizedException('Sessão expirada');
     }
 
     next();

@@ -50,25 +50,25 @@ export class VisitorsController {
     body.birthday = new Date(body.birthday);
     body.password = hashSync(body.password);
 
-    const { data, error, name, url } = await this.uploadService.upload(file);
+    // const { data, error, name, url } = await this.uploadService.upload(file);
     
-    if (isEmpty(data) || error) {
-      throw new InternalServerErrorException(
-        'Não foi possível fazer o upload da sua imagem',
-      );
-    }
+    // if (isEmpty(data) || error) {
+    //   throw new InternalServerErrorException(
+    //     'Não foi possível fazer o upload da sua imagem',
+    //   );
+    // }
 
-    body.url = url;
+    // body.url = url;
 
-    const result = await this.visitorsService.create(body);
+    // const result = await this.visitorsService.create(body);
       
-    if (!result) {
-      throw new InternalServerErrorException(
-        'Não foi possível fazer o registro',
-      );
-    }
+    // if (!result) {
+    //   throw new InternalServerErrorException(
+    //     'Não foi possível fazer o registro',
+    //   );
+    // }
 
-    return result;
+    // return result;
   }
 
   @Post('/register')
@@ -88,13 +88,13 @@ export class VisitorsController {
     )
     file: Express.Multer.File,
   ) {
-    const { data, error, name } = await this.uploadService.upload(file);
+    // const { data, error, name } = await this.uploadService.upload(file);
 
-    if (isEmpty(data) || error) {
-      return new InternalServerErrorException(
-        'Não foi possível fazer o upload do arquivo',
-      );
-    }
+    // if (isEmpty(data) || error) {
+    //   return new InternalServerErrorException(
+    //     'Não foi possível fazer o upload do arquivo',
+    //   );
+    // }
 
     return name;
   }

@@ -38,7 +38,7 @@
                 <p style="font-family: Arial, sans-serif; font-size: 16px; color: #6b7280; margin: 0 0 24px 0; text-align: center;">
                   Sua visita está agendada para o dia <%= startDate %> até <%= endDate %>. Estamos ansiosos para recebê-lo.
                 </p>
-                <img src="data:image/png;base64,<%= qrcode %>" alt="QR Code" style="display: block; margin: 0 auto; width: 200px; height: 200px;" />
+                <img src="<%= qrcode %>" alt="Caso não consiga visualizar abra o anexo." style="display: block; margin: 0 auto; width: 200px; height: 200px;" />
               </td>
             </tr>
           </table>
@@ -52,7 +52,7 @@
                   Se tiver alguma dúvida ou precisar de mais informações, por favor não hesite em nos contatar.
                 </p>
                 <p style="font-family: Arial, sans-serif; font-size: 14px; color: #0891b2; margin: 0;">
-                  <%= companyName %> © <%= year %>
+                  Acesso Fácil © <%= year %>
                 </p>
               </td>
             </tr>

@@ -26,7 +26,7 @@ export class UploadService {
     this.logger.debug(`\nurl ${this.supabaseUrl}\nkey ${this.supabaseKey}`);
   }
 
-  async upload(file: Express.Multer.File) {
+  async upload(file: Express.Multer.File): Promise<any> {
     const buffer = Buffer.from(
       file.buffer.toString().replace(/^data:image\/png;base64,/, ''),
       'base64',
@@ -53,7 +53,7 @@ export class UploadService {
       this.logger.error(err);
     }
   }
-  async uploadAll(file: Express.Multer.File) {
+  async uploadAll(file: Express.Multer.File): Promise<any> {
     const buffer = Buffer.from(
       file.buffer.toString().split(',')[1],
     );

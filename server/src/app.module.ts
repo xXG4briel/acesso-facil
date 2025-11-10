@@ -8,11 +8,13 @@ import { AuthController } from './infra/controller/auth/controller';
 import { JwtModule } from '@nestjs/jwt';
 import { VisitsController } from './infra/controller/visits/visits.controller';
 import { AuthMiddleware } from './middleware';
+import { TestController } from './infra/controller/test/test.controller';
 import { LibModule } from './infra/common';
 
 @Module({
   imports: [
     DatabaseModule,
+    LibModule,
     JwtModule.register({
       global: true,
       secret: '%/*G3cPX01-k`hzB%-OA9:}vgo)9Jtzq',
@@ -25,6 +27,7 @@ import { LibModule } from './infra/common';
     VisitorsController,
     AuthController,
     VisitsController,
+    TestController
   ],
   providers: [AppService],
   exports: [],

@@ -1,11 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ClientService } from 'src/client/client.service';
+import { EmailService } from 'src/infra/common';
 
 @Injectable()
 export class CompanysService {
   private readonly logger = new Logger(CompanysService.name);
 
-  constructor(private clientService: ClientService,) {}
+  constructor(
+    private readonly clientService: ClientService,
+    private readonly emailService: EmailService
+  ) {}
 
   async findByEmailOrIdentity(data) {
     return await this.clientService.company.findFirst({
@@ -37,12 +41,25 @@ export class CompanysService {
   async findAll() {
     return await this.clientService.company.findMany();
   }
+
+  formatDate = (d) => {
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0'); // meses começam em 0
+    const year = d.getFullYear();
+    const hours = String(d.getHours()).padStart(2, '0');
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+  
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
+  };
+
   async createVisit(data, companyId: string) {
     const visitor = await this.clientService.visitor.findFirst({
       where: {
         email: data.email.toLowerCase(),
       },
     });
+
+    const company = await this.clientService.company.findFirst({ where: { id: companyId } })
 
     if (!visitor) return { success: false, message: 'Visitante não encontrado.' };
 
@@ -56,6 +73,17 @@ export class CompanysService {
         endDate: new Date(data.endDate)
       }
     });
+
+    const dataEmail = { 
+      companyWebsiteUrl: '', 
+      companyName: company.name, 
+      qrcode: '', 
+      username: visitor.fullName.trim(), 
+      startDate: this.formatDate(new Date(data.startDate)), 
+      endDate: this.formatDate(new Date(data.endDate)) 
+    };
+
+    await this.emailService.sendTemplateEmail(visitor.email, 'Visita criada', 'visit-created', dataEmail);
 
     this.logger.log(`create visit with success Id ${visit.id}, visit ${visitor.id} ${visitor.fullName}, company ${companyId}`);
 

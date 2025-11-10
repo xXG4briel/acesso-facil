@@ -12,28 +12,34 @@ export class EmailService {
   private transporter: nodemailer.Transporter;
   private mailerSend: MailerSend;
   private emailDefault = {
-    logoUrl: 'https://acesso-facil-sigma.vercel.app//assets/images/logo.png',
+    logoUrl: 'https://acesso-facil-sigma.vercel.app/assets/logo.png',
     year: new Date().getFullYear(),
     companyName: 'Acesso Facil',
     url: 'https://acesso-facil-sigma.vercel.app/',
   }
 
   constructor() {
-    this.from = new Sender(process.env.SMTP_USER, process.env.SMTP_FROM);
+    // this.from = new Sender(process.env.SMTP_USER, process.env.SMTP_FROM);
     // this.mailerSend = new MailerSend({
     //   apiKey: process.env.SENDGRID_TOKEN,
     // });
+    this.from = process.env.SMTP_USER;
     this.transporter = nodemailer.createTransport({
+      service: "gmail",
       host: process.env.SMTP_HOST,
       port: +process.env.SMTP_PORT,
+      secure: false,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
+      tls: {
+        ciphers: "SSLv3"
+      }
     });
   }
 
-  async sendEmail(to: string, subject: string, html: string): Promise<void> {
+  async sendEmail(to: string, subject: string, html: string, attachments?: any[]): Promise<void> {
     try {
       /*
       const emailParams = new EmailParams()
@@ -43,12 +49,23 @@ export class EmailService {
       .setHtml(html);
 
       await this.mailerSend.email.send(emailParams);*/
-      await this.transporter.sendMail({
-        from: this.from,
-        to,
-        subject,
-        html,
-      });
+      if(attachments && attachments?.length > 0) {
+        await this.transporter.sendMail({
+          from: this.from,
+          to,
+          subject,
+          html,
+          attachments
+        });
+      }
+      else {
+        await this.transporter.sendMail({
+          from: this.from,
+          to,
+          subject,
+          html,
+        });
+      }
      
     } catch (error) {
       throw new Error(`Failed to send email: ${error.message}`);
@@ -59,12 +76,13 @@ export class EmailService {
       to: string,
       subject: string,
       template: string,
-      data: any
+      data: any,
+      attachments?: any[]
   ): Promise<void> {
     try {
-      const html = await this.getTemplate(template, {...data, ...this.emailDefault});
+      const html = await this.getTemplate(template, {...this.emailDefault, ...data});
 
-      await this.sendEmail(to, subject, html);
+      await this.sendEmail(to, subject, html, attachments);
       this.logger.debug(`Email sent to ${to} with subject "${subject}"`);
     } 
     catch (error) {

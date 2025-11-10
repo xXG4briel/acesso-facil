@@ -15,6 +15,10 @@ export class AuthService {
     return this.httpService.post<T>(url, data);
   }
 
+  logout() {
+    localStorage.removeItem('access_token')
+  }
+
   get() {
     return localStorage.getItem('access_token');
   }

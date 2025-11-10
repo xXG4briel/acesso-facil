@@ -11,7 +11,7 @@ export class VisitsService {
       template: 'visit-approved'
     },
     false: {
-      subject: 'Visita Aprovada',
+      subject: 'Visita Rejeitada',
       template: 'visit-reject'
     }
   }
@@ -98,12 +98,23 @@ export class VisitsService {
     }
   }
 
+  formatDate = (d) => {
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0'); // meses começam em 0
+    const year = d.getFullYear();
+    const hours = String(d.getHours()).padStart(2, '0');
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+  
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
+  };
+
   async update(id, data) {
     try {
-
       
       const result = await this.clientService.visit.update({ data: { ...data }, where: { id } });
-      const { startDate, endDate, visitorId } = result;
+      const { startDate, endDate, visitorId, companyId } = result;
+
+      const company = await this.clientService.company.findFirst({ where: { id: companyId } });
 
       if(data.approved != null) {
         this.logger.debug(`send email to visitor ${data.approved ? 'approved' : 'rejected'} visit`)
@@ -113,16 +124,32 @@ export class VisitsService {
           select: { id: true, email: true, fullName: true } 
         });
         const to = visitor.email;
-        const { subject, template, fullName: username } = this.emailSettings[data.approved];
-  
+        const { subject, template } = this.emailSettings[data.approved];
+        let username = visitor.fullName;
+
         this.logger.debug(`visitor ${to} ${visitor.id}, subject ${subject}, template ${template} `)
 
+        const emailData = {
+          qrcode: '',
+          username,
+          companyName: company.name,
+          startDate: this.formatDate(startDate), 
+          endDate: this.formatDate(endDate)
+        }
+
         if (data.approved) {
-          const qrcode = this.qrCodeService.generate(id);
-          await this.emailService.sendTemplateEmail(to, subject, template, { qrcode, username, startDate, endDate });
+          const qrcode = await this.qrCodeService.generate(id);
+          const attachments = [
+            {
+              filename: "qrcode.png",
+              content: qrcode.replace(/^data:image\/\w+;base64,/, ''),
+              encoding: "base64",
+            }
+          ]
+          await this.emailService.sendTemplateEmail(to, subject, template, { ...emailData, qrcode }, attachments);
         }
         else if (data.approved == false) {
-          await this.emailService.sendTemplateEmail(to, subject, template, { username, startDate, endDate });
+          await this.emailService.sendTemplateEmail(to, subject, template, { ...emailData });
         }
       }
 
