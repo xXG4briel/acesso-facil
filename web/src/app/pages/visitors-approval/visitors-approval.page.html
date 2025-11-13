@@ -1,0 +1,22 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="visitor-approval-container" *ngIf="!loading">
+    <div *ngIf="success" class="ion-text-center">
+      <ion-icon name="checkmark-circle-outline" color="primary" size="large"></ion-icon>
+      <ion-text color="primary">
+        <h2>Visita aprovada com sucesso!</h2>
+      </ion-text>
+      <p>Clique no botão abaixo para voltar à página inicial.</p>
+      <ion-button routerLink="/visitors" color="primary">Voltar para a Página Inicial</ion-button>
+    </div>
+  
+    
+    <div *ngIf="!success" class="ion-text-center">
+      <ion-icon name="close-circle-outline" color="danger" size="large"></ion-icon>
+      <ion-text color="danger">
+        <h2>Ocorreu um erro ao aprovar a visita.</h2>
+      </ion-text>
+      <p>Por favor, tente novamente.</p>
+      <ion-button routerLink="/visitors" color="danger">Voltar</ion-button>
+    </div>
+  </div>
+</ion-content>

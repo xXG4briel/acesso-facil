@@ -1,15 +1,20 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ClientService } from 'src/client/client.service';
 import { EmailService } from 'src/infra/common';
 
 @Injectable()
 export class CompanysService {
   private readonly logger = new Logger(CompanysService.name);
+  private readonly webUrl: string;
 
   constructor(
     private readonly clientService: ClientService,
-    private readonly emailService: EmailService
-  ) {}
+    private readonly emailService: EmailService,
+    private readonly configService: ConfigService
+  ) {
+    this.webUrl = configService.getOrThrow('WEB_URL');
+  }
 
   async findByEmailOrIdentity(data) {
     return await this.clientService.company.findFirst({
@@ -75,7 +80,7 @@ export class CompanysService {
     });
 
     const dataEmail = { 
-      companyWebsiteUrl: '', 
+      companyWebsiteUrl: `${this.webUrl}/visitors/approval/${visit.id}?approve=y`, 
       companyName: company.name, 
       qrcode: '', 
       username: visitor.fullName.trim(), 

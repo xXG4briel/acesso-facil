@@ -24,6 +24,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/visitors/visitors.module').then( m => m.VisitorsPageModule)
   },
   {
+    path: 'visitors/approval/:id',
+    loadChildren: () => import('./pages/visitors-approval/visitors-approval.module').then( m => m.VisitorsApprovalPageModule)
+  },
+  {
     path: 'companys',
     loadChildren: () => import('./pages/companys/companys.module').then( m => m.CompanysPageModule)
   },

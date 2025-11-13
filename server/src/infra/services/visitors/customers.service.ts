@@ -33,4 +33,18 @@ export class VisitorsService {
       console.error(err);
     }
   }
+
+  async preApproveVisit(visitId: string, approve: string) {
+    const isApprove = /y/.test(approve.toLowerCase().trim())
+
+    const visit = await this.clientService.visit.findFirst({ where: { id: visitId, visitorAccepted: null } });
+    if(visit) {
+      visit.visitorAccepted = isApprove;
+      await this.clientService.visit.update({ data: visit, where: { id: visit.id } });
+      return visit;
+    }
+    else {
+      return null;
+    }
+  }
 }

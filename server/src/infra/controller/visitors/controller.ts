@@ -5,8 +5,10 @@ import {
   FileTypeValidator,
   InternalServerErrorException,
   MaxFileSizeValidator,
+  Param,
   ParseFilePipe,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -23,6 +25,11 @@ export class VisitorsController {
     private visitorsService: VisitorsService,
     private uploadService: UploadService,
   ) {}
+
+  @Post('/approval/:visitId')
+  async preApproveVisit(@Param('visitId') visitId: string, @Query('approve') approve: string) {
+    if(!await this.visitorsService.preApproveVisit(visitId, approve)) throw new BadRequestException('Nenhuma visita encontrada');
+  }
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))

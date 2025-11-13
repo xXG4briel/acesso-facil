@@ -77,21 +77,22 @@ model DocumentVisit {
 }
 
 model Visit {
-  id            String          @id @default(uuid())
-  scheduledDate DateTime?
-  startDate     DateTime        @default(now())
-  endDate       DateTime        @default(now())
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  files         Json
-  description   String
-  company       Company         @relation(fields: [companyId], references: [id])
-  companyId     String
-  visitor       Visitor         @relation(fields: [visitorId], references: [id])
-  visitorId     String
-  documentVisit DocumentVisit[]
-  approved      Boolean?
-  finished      Boolean         @default(false)
+  id              String          @id @default(uuid())
+  scheduledDate   DateTime?
+  startDate       DateTime        @default(now())
+  endDate         DateTime        @default(now())
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  files           Json
+  description     String
+  company         Company         @relation(fields: [companyId], references: [id])
+  companyId       String
+  visitor         Visitor         @relation(fields: [visitorId], references: [id])
+  visitorId       String
+  documentVisit   DocumentVisit[]
+  visitorAccepted Boolean?
+  approved        Boolean?
+  finished        Boolean         @default(false)
 
   @@map("visits")
 }

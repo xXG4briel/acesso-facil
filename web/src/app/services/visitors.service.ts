@@ -14,4 +14,9 @@ export class VisitorsService {
     const url = `${BASE_URL}/visitors`
     return this.httpService.post<T>(url, data);
   }
+
+  approval<T>(id: string, approve: string): Observable<T> {
+    const url = `${BASE_URL}/visitors/approval/${id}?approve=${approve}`
+    return this.httpService.post<T>(url, {});
+  }
 }
