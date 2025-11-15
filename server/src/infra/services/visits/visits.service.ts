@@ -25,7 +25,7 @@ export class VisitsService {
     try {
       const [waiting, approved, rejected, finished] = await Promise.all([
         this.clientService.visit.findMany({
-          where: { companyId, approved: null },
+          where: { active: true, companyId, approved: null },
           include: { visitor: { select: { fullName: true, url: true, role: true, phone: true } },
           documentVisit: {
             // select: { id: true },
@@ -40,7 +40,7 @@ export class VisitsService {
           orderBy: [{ createdAt: 'asc' }]
         }),
         this.clientService.visit.findMany({
-          where: { companyId, approved: { equals: true } },
+          where: { active: true, companyId, approved: { equals: true } },
           include: { visitor: { select: { fullName: true, url: true, role: true, phone: true } },
           documentVisit: {
             // select: { id: true },
@@ -55,7 +55,7 @@ export class VisitsService {
           orderBy: [{ createdAt: 'asc' }]
         }),
         this.clientService.visit.findMany({
-          where: { companyId, approved: { equals: false } },
+          where: { active: true, companyId, approved: { equals: false } },
           include: { visitor: { select: { fullName: true, url: true, role: true, phone: true } },
           documentVisit: {
             // select: { id: true },
@@ -70,7 +70,7 @@ export class VisitsService {
           orderBy: [{ createdAt: 'asc' }]
         }),
         this.clientService.visit.findMany({
-          where: { companyId, finished: { equals: true } },
+          where: { active: true, companyId, finished: { equals: true } },
           include: { visitor: { select: { fullName: true, url: true, role: true, phone: true } },
           documentVisit: {
             // select: { id: true },
@@ -176,9 +176,7 @@ export class VisitsService {
     try {
       
       const updateData = { 
-        ...data,
-        startDate: new Date(data.startDate),
-        endDate: new Date(data.endDate),
+        ...data
       };
       const result = await this.clientService.visit.update({ data: updateData, where: { id } });
       const { startDate, endDate, visitorId, companyId } = result;

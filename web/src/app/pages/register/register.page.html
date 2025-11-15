@@ -39,6 +39,14 @@
                 </ion-row>
 
                 <ion-row>
+                  <ion-input formControlName="role" class="ion-margin-top" type="text" fill="outline" placeholder="Profissão" label="Profissão" labelPlacement="floating"></ion-input>
+                </ion-row>
+
+                <ion-row>
+                  <ion-input formControlName="phone" class="ion-margin-top" type="text" fill="outline" placeholder="Telefone" label="Telefone" labelPlacement="floating"></ion-input>
+                </ion-row>
+
+                <ion-row>
                   <ion-col size="4">
                     <ion-select formControlName="identityType" class="ion-margin-top" value="1" fill="outline" placeholder="Selecione">
                       <ion-select-option value="cnpj">CNPJ</ion-select-option>
@@ -67,6 +75,12 @@
               <canvas #canvas style="display: none;"></canvas>
               <ion-button (click)="capture()" [disabled]="photoSaved || loading">
                 {{ !takePicture ? ( photoSaved ? 'Imagem salva' : 'Tirar Foto') : 'Salvar' }}
+              </ion-button>
+
+              <input type="file" multiple label="Arquivos *" #files (change)="onFilesSelected($event)" hidden />
+
+              <ion-button color="dark" (click)="selectFile()">
+                Selecionar Arquivos
               </ion-button>
 
               <ion-button type="submit" [disabled]="loading">

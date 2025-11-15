@@ -5,6 +5,8 @@ import { CompanysService } from 'src/app/services/companys.service';
 import { VisitsService } from 'src/app/services/visits.service';
 import { ModalExampleComponent } from './modal-visit-info';
 import { ModalCreateVisitComponent } from './modal-create-visit';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-companys',
@@ -30,7 +32,9 @@ export class CompanysPage implements OnInit {
     private readonly modalCtrl: ModalController,
     private readonly visitsService: VisitsService,
     private readonly alertService: AlertService,
-    private readonly platformService: Platform
+    private readonly platformService: Platform,
+    private readonly route: Router,
+    private readonly authService: AuthService
   ) { }
 
   async ngOnInit() {
@@ -77,6 +81,11 @@ export class CompanysPage implements OnInit {
         this.alertService.alert({ header: 'Erro', message: error.message });
       }
     });
+  }
+
+  logout() {
+    this.authService.logout();
+    this.route.navigate(['login']);
   }
 
   async approveVisit(visitId: string, approved = true) {

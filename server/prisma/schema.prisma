@@ -32,7 +32,7 @@ model Visitor {
   birthday      DateTime        @db.Date
   identity      String          @db.VarChar(14)
   identityType  Identity        @default(cnpj)
-  url           String
+  url           String?
   role          String
   phone         String
   address       Json
@@ -54,7 +54,7 @@ model Document {
   visitorId     String?
   company       Company?        @relation(fields: [companyId], references: [id])
   companyId     String?
-  default       Boolean         @default(true)
+  default       Boolean         @default(false)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   DocumentVisit DocumentVisit[]
@@ -93,6 +93,7 @@ model Visit {
   documentVisit   DocumentVisit[]
   visitorAccepted Boolean?
   approved        Boolean?
+  active          Boolean         @default(true)
   finished        Boolean         @default(false)
 
   @@map("visits")

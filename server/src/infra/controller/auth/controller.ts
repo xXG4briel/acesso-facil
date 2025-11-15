@@ -26,7 +26,7 @@ export class AuthController {
     @Body() body: LoginPayload,
   ): Promise<{ access_token: string }> {
     const found = await this.companysService.findByEmailOrIdentity(body);
-    const me = found ? { name: found.name, avatar: found.url } : {};
+    const me = found ? { name: found.name.split(' ')[0], avatar: found.url } : {};
 
 
     return this.handleAccessToken(found, body, 'companys', me);
@@ -36,7 +36,7 @@ export class AuthController {
     @Body() body: LoginPayload,
   ): Promise<{ access_token: string }> {
     const found = await this.visitorsService.findByEmailOrIdentity(body);
-    const me = found ? { name: found.fullName, avatar: found.url } : {};
+    const me = found ? { name: found.fullName.split(' ')[0], avatar: found.url } : {};
 
     return this.handleAccessToken(found, body, 'visitors', me);
   }

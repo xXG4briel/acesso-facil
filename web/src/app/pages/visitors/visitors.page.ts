@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Companys } from 'src/app/models';
 import { Visit, Visits } from 'src/app/models';
 import { AlertService } from 'src/app/services/alert.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { CompanysService } from 'src/app/services/companys.service';
 import { VisitorsService } from 'src/app/services/visitors.service';
 import { VisitsService } from 'src/app/services/visits.service';
@@ -41,7 +42,8 @@ export class VisitorsPage implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly alertService: AlertService,
     private readonly companyService: CompanysService,
-    private readonly visitsService: VisitsService
+    private readonly visitsService: VisitsService,
+    private readonly authService: AuthService
   ) {
     this.visitForm = this.formBuilder.group({
       companyId: ['', Validators.required ],
@@ -73,6 +75,11 @@ export class VisitorsPage implements OnInit {
 
   back() {
     this.route.navigate(['visitors']);
+  }
+
+  logout() {
+    this.authService.logout();
+    this.route.navigate(['login']);
   }
 
   getVisitor() {
@@ -110,7 +117,6 @@ export class VisitorsPage implements OnInit {
       next: (visit) => {
         loading.dismiss();
         this.visit = visit;
-        console.log(visit);
 
         const value = {
           startDate: (visit?.startDate?.split('.') || [''])[0],
@@ -136,8 +142,6 @@ export class VisitorsPage implements OnInit {
     const files = event.target.files as FileList; // FileList ✔️
   
     this.selectedFiles = Array.from(files); // File[] ✔️
-  
-    console.log(this.selectedFiles);
   }
   
   

@@ -34,6 +34,23 @@ export class UploadService {
     return await this.upload(file, 'documents', `Companies/${visitId}`);
   }
 
+  async uploadVisitorImageProfile(file: Express.Multer.File, visitorId: string) {
+    const data = await this.upload(file, 'documents', `visitors/${visitorId}`);
+
+    const document = await this.clientService.document.create({ 
+      data: {
+        description: '',
+        name: 'Imagem de perfil',
+        url: data.url,
+        createdAt: new Date(),
+        // default: true,
+        visitorId
+      }
+    });
+
+    return data;
+  }
+
   async uploadVisitor(file: Express.Multer.File, visitId: string) {
     return await this.upload(file, 'documents', `visitors/${visitId}`);
   }

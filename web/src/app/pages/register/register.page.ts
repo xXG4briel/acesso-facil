@@ -14,6 +14,7 @@ import { VisitorsService } from 'src/app/services/visitors.service';
 export class RegisterPage implements OnInit {
   @ViewChild('videoElement') videoElement: ElementRef;
   @ViewChild('canvas') canvas: ElementRef;
+  @ViewChild('files') files: ElementRef;
 
   type: string = 'visitor';
   takePicture: boolean = false;
@@ -24,6 +25,8 @@ export class RegisterPage implements OnInit {
   visitorsForm: FormGroup;
 
   stream: MediaStream;
+
+  selectedFiles: any;
 
   constructor(
     private readonly alertService: AlertService,
@@ -54,6 +57,8 @@ export class RegisterPage implements OnInit {
       fullName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       birthday: ['', Validators.required],
+      role: ['', Validators.required],
+      phone: ['', Validators.required],
       identity: ['', Validators.required],
       identityType: ['cnpj', Validators.required],
       address: this.formBuilder.group({
@@ -64,8 +69,6 @@ export class RegisterPage implements OnInit {
         zipCode: ['', [Validators.required, Validators.pattern('^[0-9]{5}-[0-9]{3}$')]]
       })
     });
-  }
-  onClick() {
   }
   segmentChanged(e: any) {
     this.type = e.target.value
@@ -112,7 +115,30 @@ export class RegisterPage implements OnInit {
     this.takePicture = !this.takePicture;
   }
 
-   async submitCompany(): Promise<void> {
+  selectFile() {
+    this.files.nativeElement.click();
+  }
+
+  onFilesSelected(event: any) {
+    const files = event.target.files as FileList; // FileList ✔️
+  
+    this.selectedFiles = Array.from(files); // File[] ✔️
+  }
+
+  base64ToBlob(base64: string, type: string) {
+    const byteString = atob(base64.split(',')[1]);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const intArray = new Uint8Array(arrayBuffer);
+  
+    for (let i = 0; i < byteString.length; i++) {
+      intArray[i] = byteString.charCodeAt(i);
+    }
+  
+    return new Blob([intArray], { type });
+  }
+  
+
+  async submitCompany(): Promise<void> {
 
     if(this.companysForm.invalid) {
       this.alertService.alert({ header: 'Formulário incorreto', message: 'Verifique o formulário novamente.' })
@@ -156,16 +182,18 @@ export class RegisterPage implements OnInit {
       }
     });
 
-    const blob = new Blob([file], { type: 'image/png' });
+    const blob = this.base64ToBlob(file, 'image/png');
 
     formData.append('file', blob);
-
+    this.selectedFiles.forEach((f: any) => {
+      formData.append('files', f);
+    });
 
     const loading = await this.alertService.showLoading();
     this.visitorssService.create(formData).subscribe({
       next: (value) => {
         loading.dismiss();
-        this.alertService.alert({ header: 'Sucesso', message: 'Empresa cadastrada' });
+        this.alertService.alert({ header: 'Sucesso', message: 'Visitante cadastrado' });
         this.router.navigate(['/login']);
 
       },

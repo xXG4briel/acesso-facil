@@ -10,9 +10,10 @@ import {
   Post,
   Query,
   UploadedFile,
+  UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { VisitorsService } from 'src/infra/services/visitors/customers.service';
 import { UploadService } from 'src/infra/services/upload/upload.service';
 import { RegisterDTO, CreateDTO } from './dto';
@@ -32,21 +33,32 @@ export class VisitorsController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
-  async create(
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          new MaxFileSizeValidator({
-            maxSize: 1000 * 1024 * 5,
-            message: 'O arquivo deve ser menor do que 5Mb',
-          }),
-          new FileTypeValidator({ fileType: 'image/*' }),
-        ],
-      }),
+  @UseInterceptors(
+    FileFieldsInterceptor(
+      [
+        { name: 'file', maxCount: 1 },
+        { name: 'files', maxCount: 10 },
+      ]
     )
-    file: Express.Multer.File,
-    @Body() body: CreateDTO
+  )
+  async create(
+    // @UploadedFile(
+    //   new ParseFilePipe({
+    //     validators: [
+    //       new MaxFileSizeValidator({
+    //         maxSize: 1000 * 1024 * 5,
+    //         message: 'O arquivo deve ser menor do que 5Mb',
+    //       }),
+    //       // new FileTypeValidator({ fileType: 'image/*' }),
+    //     ],
+    //   }),
+    // )
+    // file: Express.Multer.File,
+    @Body() body: any,
+    @UploadedFiles() files: { 
+      file?: Express.Multer.File[], 
+      files?: Express.Multer.File[] 
+    },
   ) {
     const found = await this.visitorsService.findByEmailOrIdentity(body);
     if (found) {
@@ -57,25 +69,13 @@ export class VisitorsController {
     body.birthday = new Date(body.birthday);
     body.password = hashSync(body.password);
 
-    // const { data, error, name, url } = await this.uploadService.upload(file);
-    
-    // if (isEmpty(data) || error) {
-    //   throw new InternalServerErrorException(
-    //     'Não foi possível fazer o upload da sua imagem',
-    //   );
-    // }
+    const result = await this.visitorsService.create(body);
 
-    // body.url = url;
+    const { data, error, name, url } = await this.uploadService.uploadVisitorImageProfile(files.file[0], result.id);
 
-    // const result = await this.visitorsService.create(body);
-      
-    // if (!result) {
-    //   throw new InternalServerErrorException(
-    //     'Não foi possível fazer o registro',
-    //   );
-    // }
+    await this.visitorsService.updateUrl(result.id, url);
 
-    // return result;
+    await this.visitorsService.uploadDefaultFiles(files.files, result.id);
   }
 
   @Post('/register')

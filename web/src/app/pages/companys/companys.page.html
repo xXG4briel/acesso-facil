@@ -1,11 +1,21 @@
 <ion-header color="primary">
   <ion-toolbar color="primary">
-    <ion-item color="primary">
-      <ion-thumbnail>
-        <img [src]="company.avatar ? company.avatar : 'https://us.123rf.com/450wm/anatolir/anatolir2011/anatolir201105528/159470802-jurist-avatar-icon-flat-style.jpg?ver\u003d6' " />
-      </ion-thumbnail>
-      <ion-label class="ion-padding-start">{{ company.name ? company.name : 'Empresa não encontrada' }}</ion-label>
-    </ion-item>
+    <div style="display: flex;justify-content: space-between;"  >
+      <div>
+        <ion-item color="primary">
+          <ion-thumbnail>
+            <img [src]="company.avatar ? company.avatar : 'https://us.123rf.com/450wm/anatolir/anatolir2011/anatolir201105528/159470802-jurist-avatar-icon-flat-style.jpg?ver\u003d6' " />
+          </ion-thumbnail>
+          <ion-label class="ion-padding-start">{{ company.name ? company.name : 'Empresa não encontrada' }}</ion-label>
+        </ion-item>
+      </div>
+      
+      <div style="display: flex;">
+        <ion-button fill="clear" color="light" (click)="logout()">
+          <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
