@@ -25,17 +25,14 @@ export class EmailService {
     // });
     this.from = process.env.SMTP_USER;
     this.transporter = nodemailer.createTransport({
-      service: "gmail",
+      // service: "gmail",
       host: process.env.SMTP_HOST,
       port: +process.env.SMTP_PORT,
-      secure: false,
+      secure: true,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
-      tls: {
-        ciphers: "SSLv3"
-      }
     });
   }
 
