@@ -23,6 +23,8 @@ export class CompanysPage implements OnInit {
   company: { name: string, avatar: string };
   isMobile: boolean = false;
 
+  loading = false;
+
   constructor(
     private readonly companyService: CompanysService,
     private readonly modalCtrl: ModalController,
@@ -46,11 +48,17 @@ export class CompanysPage implements OnInit {
 
   }
 
-  private async getVisits() {
+  async getVisits() {
+    if(this.loading) return;
+
     const loading = await this.alertService.showLoading();
 
+    this.loading = true;
+
     this.visitsService.getVisits<{ approved: any[]; finished: any[]; rejected: any[]; waiting: any[]; }>().subscribe({
-      next: ({ approved, finished, rejected, waiting }) => {
+      next: (data) => {
+
+        const { approved, finished, rejected, waiting } = data;
 
         this.visitorsApproved = approved;
         this.visitorsFinish = finished;
@@ -58,11 +66,13 @@ export class CompanysPage implements OnInit {
         this.visitorsWaiting = waiting;
 
         loading.dismiss();
+        this.loading = false;
       },
       error: (err) => {
         const { error } = err;
 
         loading.dismiss();
+        this.loading = false;
 
         this.alertService.alert({ header: 'Erro', message: error.message });
       }
@@ -70,17 +80,19 @@ export class CompanysPage implements OnInit {
   }
 
   async approveVisit(visitId: string, approved = true) {
+    this.loading = true;
     const loading = await this.alertService.showLoading();
 
     this.visitsService.approveVisit(visitId, { approved }).subscribe({
       next: (value) => {
         loading.dismiss();
 
+        this.loading = false;
         this.getVisits();
       },
       error: (err) => {
         const { error } = err;
-
+        this.loading = false;
         loading.dismiss();
 
         this.alertService.alert({ header: 'Erro', message: error.message });
@@ -88,17 +100,25 @@ export class CompanysPage implements OnInit {
     })
   }
 
-  createVisitSubmit(value: unknown){
+  async createVisitSubmit(value: unknown){
+    this.loading = true;
+    const loading = await this.alertService.showLoading();
     this.companyService.createVisit(value).subscribe({
       next: async (value) => {
         this.alertService.alert({ header: 'Sucesso', message: 'Visita criada com sucesso' });
         this.modalCtrl.dismiss();
+        this.loading = false;
+        loading.dismiss();
       },
       error: (err) => {
         this.alertService.alert({ header: 'Erro', message: `Não foi possível criar a visita. ${err.error.message}` });
+        this.loading = false;
+        loading.dismiss();
       },
       complete: async() => {
-        await this.getVisits(); // to do validar se funfa
+        this.loading = false;
+        this.getVisits(); // to do validar se funfa
+        loading.dismiss();
       }
     });
   }
@@ -107,7 +127,8 @@ export class CompanysPage implements OnInit {
     const modal = await this.modalCtrl.create({
       component: ModalCreateVisitComponent,
       componentProps: {
-        createVisitSubmit: this.createVisitSubmit
+        createVisitSubmit: this.createVisitSubmit,
+        loading: this.loading
       }
     })
 
@@ -131,19 +152,22 @@ export class CompanysPage implements OnInit {
       next: async (value) => {
         this.alertService.alert({ header: 'Sucesso', message: 'Visita atualizada com sucesso' });
         this.modalCtrl.dismiss();
+        this.loading = false;
+        await this.getVisits();
       },
       error: (err) => {
         this.alertService.alert({ header: 'Erro', message: `Não foi possível atualizar a visita. ${err.error.message}` });
       },
       complete: async() => {
-        await this.getVisits(); // to do validar se funfa
       }
     });
   }
 
   async segmentChanged(e: any){
-    this.type = e.target.value;
-    await this.getVisits()
+    if(!this.loading) {
+      this.type = e.target.value;
+      // await this.getVisits()
+    }
   }
 
 

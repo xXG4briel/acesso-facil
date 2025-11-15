@@ -33,12 +33,12 @@
 <ion-footer>
   <ion-toolbar>
     <ion-item>
-      <ion-button size="larger" color="danger" (click)="closeModal()">
+      <ion-button size="larger" color="danger" (click)="closeModal()" [disabled]="loading">
         <ion-icon name="close-outline" class="ion-margin-right"></ion-icon>
         Fechar
       </ion-button>
   
-      <ion-button size="larger" color="success" [disabled]="!form.valid" (click)="createVisitSubmit(form.value)">  
+      <ion-button size="larger" color="success" [disabled]="!form.valid || loading" (click)="createVisitSubmit(form.value)">  
         <ion-icon name="save-outline" class="ion-margin-right"></ion-icon>
         Salvar
       </ion-button>

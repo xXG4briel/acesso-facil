@@ -5,6 +5,7 @@ import { Companys } from 'src/app/models';
 import { Visit, Visits } from 'src/app/models';
 import { AlertService } from 'src/app/services/alert.service';
 import { CompanysService } from 'src/app/services/companys.service';
+import { VisitorsService } from 'src/app/services/visitors.service';
 import { VisitsService } from 'src/app/services/visits.service';
 
 @Component({
@@ -30,6 +31,8 @@ export class VisitorsPage implements OnInit {
 
   companys: Companys[] = [];
 
+  selectedFiles: any;
+
   form = false;
 
   constructor(
@@ -38,12 +41,13 @@ export class VisitorsPage implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly alertService: AlertService,
     private readonly companyService: CompanysService,
-    private readonly visitsService: VisitsService,
+    private readonly visitsService: VisitsService
   ) {
     this.visitForm = this.formBuilder.group({
       companyId: ['', Validators.required ],
       description: ['', Validators.required ],
-      scheduledDate: ['', Validators.required ]
+      startDate: ['', Validators.required ],
+      endDate: ['', Validators.required ]
     })
   }
 
@@ -80,8 +84,10 @@ export class VisitorsPage implements OnInit {
     const loading = await this.alertService.showLoading();
 
     this.visitsService.getVisitsByVisitors<Visits>().subscribe({
-      next: ({ approved, finished, rejected, waiting }) => {
+      next: (data) => {
         loading.dismiss();
+
+        const { approved, finished, rejected, waiting } = data;
 
         this.visitorsWaiting = waiting;
         this.visitorsApproved = approved;
@@ -107,7 +113,8 @@ export class VisitorsPage implements OnInit {
         console.log(visit);
 
         const value = {
-          scheduledDate: visit.scheduledDate.split('.')[0],
+          startDate: (visit?.startDate?.split('.') || [''])[0],
+          endDate: (visit?.endDate?.split('.') || [''])[0],
           description: visit.description,
           companyId: visit.companyId
         }
@@ -124,12 +131,28 @@ export class VisitorsPage implements OnInit {
       }
     })
   }
+
+  onFilesSelected(event: any) {
+    const files = event.target.files as FileList; // FileList ✔️
+  
+    this.selectedFiles = Array.from(files); // File[] ✔️
+  
+    console.log(this.selectedFiles);
+  }
+  
+  
   async submit() {
 
 
     if(this.visit && this.visit.id) {
       const loading = await this.alertService.showLoading();
-      this.visitsService.patchVisit(this.visit.id, this.visitForm.value).subscribe({
+
+      // if (!this.selectedFile) {
+      //   await this.alertService.alert({ header: 'Erro', message: 'Arquivo não selecionado' });
+      //   return;
+      // }
+
+      this.visitsService.uploadAll(this.visit.id, this.selectedFiles).subscribe({
         next: () => {
           loading.dismiss();
           this.alertService.alert({ header: 'Sucesso', message: 'Atualizado com sucesso' });
@@ -190,6 +213,10 @@ export class VisitorsPage implements OnInit {
     }
   }
 
+  onFileSelected(event: any) {
+
+  }
+
   getCompany() {
     this.companyService.findAll<Companys>().subscribe({
       next: (companys) => {
@@ -206,12 +233,22 @@ export class VisitorsPage implements OnInit {
     this.type = e.target.value;
     this.getVisits();
   }
-  // log() {
-  //   const el = this.files.nativeElement;
-  //   console.log(el.files)
-  // }
-  deleteFile() {
-    this.alertService.alert({ header: 'Erro', message: 'Não é possível excluir este arquivo. Aguarde futuras atualizações' });
+
+  async delete(id: string, documentVisitId: string) {
+    const loading = await this.alertService.showLoading();
+    this.visitsService.delete(id, documentVisitId).subscribe({
+      next: async (value) => {
+        loading.dismiss();
+        this.alertService.alert({ header: 'Sucesso', message: 'Deletado com sucesso' });
+        await this.getVisits();
+      },
+      error: (err) => {
+        loading.dismiss();
+        const { error } = err;
+
+        this.alertService.alert({ header: 'Erro', message: error.message })
+      }
+    })
   }
 
 }

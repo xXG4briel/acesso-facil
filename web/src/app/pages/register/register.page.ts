@@ -84,7 +84,9 @@ export class RegisterPage implements OnInit {
         video.play();
       })
       .catch( async (error) => {
-        await this.alertService.alert({ header: 'Erro', message: error })
+        console.log({ error });
+        await this.alertService.alert({ header: 'Erro', message: 'Erro ao tirar selfie' });
+        this.photoSaved = false;
       });
       this.loading = false;
     }

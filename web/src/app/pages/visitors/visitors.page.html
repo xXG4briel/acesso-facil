@@ -31,22 +31,22 @@
         <ion-row>
           <ng-container *ngIf="type == 'wait'">
             <ion-col size-lg="4" size-md="6" size-xs="12" *ngFor="let visitor of visitorsWaiting">
-              <app-card-visits [visitor]="visitor"></app-card-visits>
+              <app-card-visits [visitor]="visitor" [delete]="delete.bind(this)"></app-card-visits>
             </ion-col>
           </ng-container>
           <ng-container *ngIf="type == 'approve'">
             <ion-col size-lg="4" size-md="6" size-xs="12" *ngFor="let visitor of visitorsApproved">
-              <app-card-visits [visitor]="visitor"></app-card-visits>
+              <app-card-visits [visitor]="visitor" [delete]="delete.bind(this)"></app-card-visits>
             </ion-col>
           </ng-container>
           <ng-container *ngIf="type == 'reject'">
             <ion-col size-lg="4" size-md="6" size-xs="12" *ngFor="let visitor of visitorsReject">
-              <app-card-visits [visitor]="visitor"></app-card-visits>
+              <app-card-visits [visitor]="visitor" [delete]="delete.bind(this)"></app-card-visits>
             </ion-col>
           </ng-container>
           <ng-container *ngIf="type == 'finish'">
             <ion-col size-lg="4" size-md="6" size-xs="12" *ngFor="let visitor of visitorsFinish">
-              <app-card-visits [visitor]="visitor"></app-card-visits>
+              <app-card-visits [visitor]="visitor" [delete]="delete.bind(this)"></app-card-visits>
             </ion-col>
           </ng-container>
         </ion-row>
@@ -68,27 +68,30 @@
             <ion-col size="12">
             </ion-col>
             <ion-col size="5">
-              <ion-select [disabled]="visit.id != null" formControlName="companyId" fill="outline" placeholder="Selecione" label="Empresa *" labelPlacement="floating">
+              <ion-select [disabled]="visit?.id != null" formControlName="companyId" fill="outline" placeholder="Selecione" label="Empresa *" labelPlacement="floating">
                 <ion-select-option *ngFor="let company of companys" [value]="company?.id">{{ company?.name }}</ion-select-option>
               </ion-select>
             </ion-col>
-            <ion-col size="7">
-              <ion-input [disabled]="visit.id != null" formControlName="scheduledDate" type="datetime-local" fill="outline" placeholder="Horário" label="Horário de agendamento" [disabled]="visit.id != null && visit.approved != null" labelPlacement="floating"></ion-input>
+            <ion-col size="3.5">
+              <ion-input [disabled]="visit?.id != null" formControlName="startDate" type="datetime-local" fill="outline" placeholder="De" label="" [disabled]="visit?.id != null && visit.approved != null" labelPlacement="floating"></ion-input>
+            </ion-col>
+            <ion-col size="3.5">
+              <ion-input [disabled]="visit?.id != null" formControlName="endDate" type="datetime-local" fill="outline" placeholder="Até" label="" [disabled]="visit?.id != null && visit.approved != null" labelPlacement="floating"></ion-input>
             </ion-col>
             <ion-col size="12">
-              <ion-textarea [disabled]="visit.id != null" formControlName="description" type="text" fill="outline" rows="5" placeholder="Descrição de serviço" label="Descrição do serviço *" labelPlacement="floating"></ion-textarea>
+              <ion-textarea [disabled]="visit?.id != null" formControlName="description" type="text" fill="outline" rows="5" placeholder="Descrição de serviço" label="Descrição do serviço *" labelPlacement="floating"></ion-textarea>
             </ion-col>
 
             <ion-col size="6">
               <ion-item [disabled]="!(visit.approved == null && !visit.finished)" lines="none" class="ion-no-padding">
                 <ion-label>Arquivos</ion-label>
-                <input type="file" multiple label="Arquivos *" #files />
+                <input type="file" multiple label="Arquivos *" #files (change)="onFilesSelected($event)" />
               </ion-item>
             </ion-col>
             <ion-col size="6">
-              <ion-item *ngFor="let file of visit?.files;let i = index" [style]=" i % 2 == 0 ? '--background: #e5e5e5;': '' ">
-                <ion-label style="overflow: hidden;white-space: nowrap;" [title]="file.name">{{ file.name }}</ion-label>
-                <ion-button (click)="deleteFile()" fill="clear">
+              <ion-item *ngFor="let file of visit?.documentVisit;let i = index" [style]=" i % 2 == 0 ? '--background: #e5e5e5;': '' ">
+                <ion-label style="overflow: hidden;white-space: nowrap;" [title]="file?.document?.name">{{ file?.document?.name }}</ion-label>
+                <ion-button (click)="delete(visit.id, file.id)" fill="clear">
                   <ion-icon name="trash"></ion-icon>
                 </ion-button>
               </ion-item>

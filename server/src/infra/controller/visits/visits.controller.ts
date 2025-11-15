@@ -1,5 +1,5 @@
-import { BadRequestException, Body, Controller, Get, InternalServerErrorException, Logger, Param, Patch, Post, Request, UploadedFiles, UseInterceptors } from '@nestjs/common';
-import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { BadRequestException, Body, Controller, Delete, Get, InternalServerErrorException, Logger, Param, Patch, Post, Request, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { AnyFilesInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { get, isEmpty } from 'lodash';
 import { UploadService } from 'src/infra/services/upload/upload.service';
 import { VisitsService } from 'src/infra/services/visits/visits.service';
@@ -116,5 +116,19 @@ export class VisitsController {
     this.logger.debug(`id: ${id}, data: ${JSON.stringify(data)}`);
 
     return await this.visitsService.update(id, data);
+  }
+
+  @Post(':id/upload')
+  @UseInterceptors(FilesInterceptor('file'))
+  async uploadAll(
+    @UploadedFiles() files: Express.Multer.File[],
+    @Param('id') id: string
+  ) {
+    await this.uploadService.uploadAllVisit(files, id);
+  }
+
+  @Delete(':id/file/:fileId')
+  async deleteFile(@Param('id') id: string, @Param('fileId') fileId: string) {
+    await this.visitsService.deleteFile(id, fileId);
   }
 }

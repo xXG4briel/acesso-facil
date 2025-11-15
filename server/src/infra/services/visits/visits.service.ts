@@ -26,22 +26,62 @@ export class VisitsService {
       const [waiting, approved, rejected, finished] = await Promise.all([
         this.clientService.visit.findMany({
           where: { companyId, approved: null },
-          include: { visitor: { select: { fullName: true, url: true, role: true, phone: true } }, documentVisit: { include: { document: { select: { name: true, url: true } } } } },
+          include: { visitor: { select: { fullName: true, url: true, role: true, phone: true } },
+          documentVisit: {
+            // select: { id: true },
+            where: { active: true },
+            include: { 
+              document: { 
+                select: { name: true, url: true }
+              }
+            }
+          }
+        },
           orderBy: [{ createdAt: 'asc' }]
         }),
         this.clientService.visit.findMany({
           where: { companyId, approved: { equals: true } },
-          include: { visitor: { select: { fullName: true, url: true, role: true, phone: true } }, documentVisit: { include: { document: { select: { name: true, url: true } } } } },
+          include: { visitor: { select: { fullName: true, url: true, role: true, phone: true } },
+          documentVisit: {
+            // select: { id: true },
+            where: { active: true }, 
+            include: { 
+              document: { 
+                select: { name: true, url: true }
+              }
+            }
+          }
+        },
           orderBy: [{ createdAt: 'asc' }]
         }),
         this.clientService.visit.findMany({
           where: { companyId, approved: { equals: false } },
-          include: { visitor: { select: { fullName: true, url: true, role: true, phone: true } }, documentVisit: { include: { document: { select: { name: true, url: true } } } } },
+          include: { visitor: { select: { fullName: true, url: true, role: true, phone: true } },
+          documentVisit: {
+            // select: { id: true },
+            where: { active: true }, 
+            include: { 
+              document: { 
+                select: { name: true, url: true }
+              }
+            }
+          }
+        },
           orderBy: [{ createdAt: 'asc' }]
         }),
         this.clientService.visit.findMany({
           where: { companyId, finished: { equals: true } },
-          include: { visitor: { select: { fullName: true, url: true, role: true, phone: true } }, documentVisit: { include: { document: { select: { name: true, url: true } } } } },
+          include: { visitor: { select: { fullName: true, url: true, role: true, phone: true } },
+          documentVisit: {
+            // select: { id: true },
+            where: { active: true }, 
+            include: { 
+              document: { 
+                select: { name: true, url: true }
+              }
+            }
+          }
+        },
           orderBy: [{ createdAt: 'asc' }]
         }),
       ]);
@@ -56,22 +96,46 @@ export class VisitsService {
       const [waiting, approved, rejected, finished] = await Promise.all([
         this.clientService.visit.findMany({
           where: { visitorId, approved: null },
-          include: { company: { select: { name: true, url: true, address: true } } },
+          include: { 
+            company: { select: { name: true, url: true, address: true } },
+            documentVisit: { 
+              select: { id: true, document: { select: { url: true, name: true } } },
+              where: { active: true }
+            }            
+          },            
           orderBy: [{ createdAt: 'asc' }]
         }),
         this.clientService.visit.findMany({
           where: { visitorId, approved: { equals: true } },
-          include: { company: { select: { name: true, url: true, address: true } } },
+          include: { 
+            company: { select: { name: true, url: true, address: true } },
+            documentVisit: { 
+              select: { id: true, document: { select: { url: true, name: true } } },
+              where: { active: true }
+            }            
+          },            
           orderBy: [{ createdAt: 'asc' }]
         }),
         this.clientService.visit.findMany({
           where: { visitorId, approved: { equals: false } },
-          include: { company: { select: { name: true, url: true, address: true } } },
+          include: { 
+            company: { select: { name: true, url: true, address: true } },
+            documentVisit: { 
+              select: { id: true, document: { select: { url: true, name: true } } },
+              where: { active: true }
+            }
+          },            
           orderBy: [{ createdAt: 'asc' }]
         }),
         this.clientService.visit.findMany({
           where: { visitorId, finished: { equals: true } },
-          include: { company: { select: { name: true, url: true, address: true } } },
+          include: { 
+            company: { select: { name: true, url: true, address: true } },
+            documentVisit: { 
+              select: { id: true, document: { select: { url: true, name: true } } },
+              where: { active: true }
+            }            
+          },            
           orderBy: [{ createdAt: 'asc' }]
         }),
       ]);
@@ -111,7 +175,12 @@ export class VisitsService {
   async update(id, data) {
     try {
       
-      const result = await this.clientService.visit.update({ data: { ...data }, where: { id } });
+      const updateData = { 
+        ...data,
+        startDate: new Date(data.startDate),
+        endDate: new Date(data.endDate),
+      };
+      const result = await this.clientService.visit.update({ data: updateData, where: { id } });
       const { startDate, endDate, visitorId, companyId } = result;
 
       const company = await this.clientService.company.findFirst({ where: { id: companyId } });
@@ -157,6 +226,16 @@ export class VisitsService {
       return result;
     } catch (err) {
       this.logger.error(err);
+    }
+  }
+
+  async deleteFile(id: string, fileId: string) {
+    const document = await this.clientService.documentVisit.findFirst({
+      where: { visitId: id, id: fileId }
+    });
+    if(document) {
+      document.active = false;
+      await this.clientService.documentVisit.update({ data: document, where: { id: document.id } });
     }
   }
 }

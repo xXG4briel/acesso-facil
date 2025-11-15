@@ -5,7 +5,7 @@
         <ion-card-subtitle>{{ visitor.scheduledDate | date : 'dd/MM/yyyy hh:mm' }}</ion-card-subtitle>
         <h2 style="color: var(--ion-color-dark);">{{ visitor.company.name }}</h2>
       </div>
-      <ion-button style="width: fit-content;" size="small" shape="round" fill="clear" [routerLink]="visitor.id">
+      <ion-button style="width: fit-content;" size="small" shape="round" fill="clear" [routerLink]=" '/visitors/' + visitor.id">
         <ion-icon slot="icon-only" name="pencil"></ion-icon>
       </ion-button>
     </div>
@@ -15,15 +15,15 @@
     <p class="no-wrap" [title]="getAddresVisitor(visitor.company.address)">{{ getAddresVisitor(visitor.company.address) }}</p>
     <!-- <p>{{ visitor.description }}</p> -->
     <ion-accordion-group>
-      <ion-accordion [disabled]="!visitor.files.length">
+      <ion-accordion [disabled]="!visitor.documentVisit.length">
         <ion-item slot="header" color="light">
-          <ion-label class="no-wrap">({{ visitor.files.length }}) Arquivos</ion-label>
+          <ion-label class="no-wrap">({{ visitor.documentVisit.length }}) Arquivos</ion-label>
         </ion-item>
 
         <div class="ion-padding file-list" slot="content">
-          <ion-item *ngFor="let file of visitor?.files" disabled button>
-            <ion-label class="no-wrap">{{ file.name }}</ion-label>
-            <ion-button fill="clear">
+          <ion-item *ngFor="let file of visitor?.documentVisit" button>
+            <ion-label class="no-wrap">{{ file.document.name }}</ion-label>
+            <ion-button fill="clear" (click)="delete(visitor.id, file.id)">
               <ion-icon slot="icon-only" name="trash"></ion-icon>
             </ion-button>
           </ion-item>

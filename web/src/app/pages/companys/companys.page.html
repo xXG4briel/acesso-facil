@@ -14,16 +14,16 @@
   <main>
 
     <ion-segment [scrollable]="true" value="wait" (ionChange)="segmentChanged($event)" class="ion-margin-top">
-      <ion-segment-button value="wait" [disabled]="!visitorsWaiting?.length" [style.pointer-events]="!visitorsWaiting?.length ? 'none' : 'initial'">
+      <ion-segment-button value="wait" [disabled]="!visitorsWaiting?.length" [style.pointer-events]="!visitorsWaiting?.length ? 'none' : 'initial'" (click)="getVisits()">
         <ion-label>{{ visitorsWaiting?.length ?? 0 }} Aguardando</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="approve" [disabled]="!visitorsApproved?.length" [style.pointer-events]="!visitorsApproved?.length ? 'none' : 'initial'">
+      <ion-segment-button value="approve" [disabled]="!visitorsApproved?.length" [style.pointer-events]="!visitorsApproved?.length ? 'none' : 'initial'" (click)="getVisits()">
         <ion-label>{{ visitorsApproved?.length ?? 0 }} Autorizados</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="reject" [disabled]="!visitorsReject?.length" [style.pointer-events]="!visitorsReject?.length ? 'none' : 'initial'">
+      <ion-segment-button value="reject" [disabled]="!visitorsReject?.length" [style.pointer-events]="!visitorsReject?.length ? 'none' : 'initial'" (click)="getVisits()">
         <ion-label>{{ visitorsReject?.length ?? 0 }} Recusados</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="finish" [disabled]="!visitorsFinish?.length" [style.pointer-events]="!visitorsFinish?.length ? 'none' : 'initial'">
+      <ion-segment-button value="finish" [disabled]="!visitorsFinish?.length" [style.pointer-events]="!visitorsFinish?.length ? 'none' : 'initial'" (click)="getVisits()">
         <ion-label>{{ visitorsFinish?.length ?? 0 }} Finalizados</ion-label>
       </ion-segment-button>
     </ion-segment>

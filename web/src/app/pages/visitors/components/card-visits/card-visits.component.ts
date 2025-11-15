@@ -9,13 +9,14 @@ import { Visit } from 'src/app/models';
 export class CardVisitsComponent  implements OnInit {
 
   @Input() visitor: Visit;
+  @Input() delete: (id: string, documentVisitId: string) => void;
 
   constructor() { }
 
   ngOnInit() {}
 
   getAddresVisitor(address: { city: string, number: string, state: string, street: string, country: string, zipCode: string }) {
-    return `${address.street}, ${address.number || 'Sem número'}, ${address.zipCode} - ${address.city}`;
+    return `${address.street || 'Sem Rua'}, ${address.number || 'Sem número'}, ${address.zipCode || '00000-000'} - ${address.city || 'N/A'}`;
   }
 
 }

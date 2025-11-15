@@ -70,6 +70,7 @@ model DocumentVisit {
   visit      Visit    @relation(fields: [visitId], references: [id])
   document   Document @relation(fields: [documentId], references: [id])
   documentId String
+  active     Boolean  @default(true)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 

@@ -22,6 +22,16 @@ export class VisitsService {
     const url = `${BASE_URL}/visits/${id}`
     return this.httpService.patch<T>(url, data);
   }
+  uploadAll<T>(id: string, files: any): Observable<T> {
+    const url = `${BASE_URL}/visits/${id}/upload`
+    const formData = new FormData();
+
+    files.forEach((file: any) => {
+      formData.append('file', file);
+    });
+
+    return this.httpService.post<T>(url, formData);
+  }
   getVisits<T>(): Observable<T> {
     const url = `${BASE_URL}/visits/companys`
     return this.httpService.get<T>(url);
@@ -33,5 +43,9 @@ export class VisitsService {
   approveVisit<T>(id: string, data: any): Observable<T> {
     const url = `${BASE_URL}/visits/${id}`
     return this.httpService.patch<T>(url, data);
+  }
+  delete<T>(id: string, documentVisitId: string): Observable<T> {
+    const url = `${BASE_URL}/visits/${id}/file/${documentVisitId}`
+    return this.httpService.delete<T>(url);
   }
 }

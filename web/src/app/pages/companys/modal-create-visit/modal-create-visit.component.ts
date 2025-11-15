@@ -13,7 +13,8 @@ export class ModalCreateVisitComponent  implements OnInit {
 
   form: FormGroup;
 
-  @Input() createVisitSubmit: (value: unknown) => void;;
+  @Input() createVisitSubmit: (value: unknown) => void;
+  @Input() loading: boolean;
 
   constructor(
     private modalCtrl: ModalController, 

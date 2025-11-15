@@ -41,7 +41,7 @@
 
     <ion-item *ngFor="let file of visit.documentVisit" button>
       <ion-label>{{ file.document.name }}</ion-label>
-      <ion-button (click)="downloadFile(file)" fill="clear">
+      <ion-button (click)="downloadFile(file.document)" fill="clear">
         <ion-icon slot="icon-only" name="download-outline"></ion-icon>
       </ion-button>
     </ion-item>

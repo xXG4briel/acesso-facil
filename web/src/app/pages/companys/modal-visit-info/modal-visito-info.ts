@@ -33,7 +33,14 @@ export class ModalExampleComponent {
   }
 
   downloadFile(file: any) {
+    const a = document.createElement('a')
+    a.href = file.url;
+    a.download = file.name;
+    a.target = '_blank';
 
+    document.body.appendChild(a);
+    a.click();              
+    document.body.removeChild(a);
   }
 
   cancel() {

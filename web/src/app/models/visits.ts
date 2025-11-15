@@ -1,10 +1,20 @@
 export class Visit {
   id: string
   scheduledDate: string
+  startDate: string
+  endDate: string
   createdAt: string
   updatedAt: string
   files: Array<{
     name: string
+  }>
+  documentVisit: Array<{
+    id: string
+    document: {
+      id: string
+      name: string,
+      url: string
+    }
   }>
   description: string
   companyId: string
