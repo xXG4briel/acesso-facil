@@ -32,15 +32,20 @@ export class ModalExampleComponent {
     });
   }
 
-  downloadFile(file: any) {
-    const a = document.createElement('a')
-    a.href = file.url;
+  async downloadFile(file: any) {
+    const response = await fetch(file.url);
+    const blob = await response.blob();
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
     a.download = file.name;
-    a.target = '_blank';
 
     document.body.appendChild(a);
-    a.click();              
+    a.click();
     document.body.removeChild(a);
+
+    URL.revokeObjectURL(url);
   }
 
   cancel() {
