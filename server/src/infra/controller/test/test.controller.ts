@@ -41,8 +41,7 @@ export class TestController {
 
     @Put(':id')
     async sendEmail(@Param('id') id: string) {
-        // let to = 'acesso.facil.contato@outlook.com';
-        let to = 'gabrielgeorge95@gmail.com';
+        let to = 'acesso.facil.contato@outlook.com';
         let username = 'Ayrton Senna';
 
         const { subject, template } = this.emailSettings[String(id != '0')];

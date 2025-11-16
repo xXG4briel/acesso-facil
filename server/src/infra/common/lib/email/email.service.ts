@@ -4,6 +4,7 @@ import { template } from 'lodash';
 import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
 import * as nodemailer from 'nodemailer';
 import { readFile } from 'fs/promises';
+import { Resend } from 'resend';
 
 @Injectable()
 export class EmailService {
@@ -17,6 +18,7 @@ export class EmailService {
     companyName: 'Acesso Facil',
     url: 'https://acesso-facil-sigma.vercel.app/',
   }
+  private resend: Resend;
 
   constructor() {
     // this.from = new Sender(process.env.SMTP_USER, process.env.SMTP_FROM);
@@ -24,16 +26,17 @@ export class EmailService {
     //   apiKey: process.env.SENDGRID_TOKEN,
     // });
     this.from = process.env.SMTP_USER;
-    this.transporter = nodemailer.createTransport({
-      // service: "gmail",
-      host: process.env.SMTP_HOST,
-      port: +process.env.SMTP_PORT,
-      secure: true,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
+    // this.transporter = nodemailer.createTransport({
+    //   // service: "gmail",
+    //   host: process.env.SMTP_HOST,
+    //   port: +process.env.SMTP_PORT,
+    //   secure: true,
+    //   auth: {
+    //     user: process.env.SMTP_USER,
+    //     pass: process.env.SMTP_PASS,
+    //   },
+    // });
+    this.resend = new Resend(process.env.RESEND_KEY);
   }
 
   async sendEmail(to: string, subject: string, html: string, attachments?: any[]): Promise<void> {
@@ -44,26 +47,40 @@ export class EmailService {
       .setTo([ new Recipient(to) ])
       .setSubject(subject)
       .setHtml(html);
-
       await this.mailerSend.email.send(emailParams);*/
-      if(attachments && attachments?.length > 0) {
-        await this.transporter.sendMail({
-          from: this.from,
-          to,
-          subject,
-          html,
-          attachments
-        });
+
+      const payload: any = {
+        from: this.from,
+        to,
+        subject,
+        html,
+      };
+      // if(attachments && attachments?.length > 0) {
+        // await this.transporter.sendMail({
+        //   from: this.from,
+        //   to,
+        //   subject,
+        //   html,
+        //   attachments
+        // });
+      // }
+      // else {
+        // await this.transporter.sendMail({
+        //   from: this.from,
+        //   to,
+        //   subject,
+        //   html,
+        // });
+      // }
+      if (attachments?.length) {
+        payload.attachments = attachments.map(a => ({
+          filename: a.filename,
+          content: typeof a.content === "string" ? a.content : a.content.toString("base64"),
+          contentType: a.contentType || "application/octet-stream",
+        }));
       }
-      else {
-        await this.transporter.sendMail({
-          from: this.from,
-          to,
-          subject,
-          html,
-        });
-      }
-     
+      
+      await this.resend.emails.send(payload);
     } catch (error) {
       throw new Error(`Failed to send email: ${error.message}`);
     }
